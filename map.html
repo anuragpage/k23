@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My GitHub Website - Site Navigation</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        header {
+            background-color: #24292e;
+            color: white;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        h1 {
+            margin: 0;
+        }
+        .site-description {
+            font-style: italic;
+            margin-top: 10px;
+            color: #c9d1d9;
+        }
+        .navigation-container {
+            background: white;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        h2 {
+            border-bottom: 2px solid #0366d6;
+            padding-bottom: 10px;
+            color: #0366d6;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        a {
+            color: #0366d6;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        a:hover {
+            color: #0550ae;
+            text-decoration: underline;
+        }
+        .tag {
+            font-size: 12px;
+            background: #e1e4e8;
+            padding: 3px 8px;
+            border-radius: 3px;
+            margin-left: 5px;
+            color: #555;
+        }
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #e1e4e8;
+            color: #666;
+        }
+        .update-info {
+            font-style: italic;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        .loading {
+            text-align: center;
+            padding: 20px;
+            font-style: italic;
+            color: #666;
+        }
+        .error {
+            color: #d73a49;
+            font-weight: bold;
+            padding: 10px;
+            background-color: #fff5f5;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .folder-name {
+            font-weight: bold;
+            margin-top: 15px;
+            margin-bottom: 5px;
+            color: #24292e;
+        }
+        .file-size {
+            font-size: 12px;
+            color: #666;
+            margin-left: 10px;
+        }
+        .last-updated {
+            font-size: 12px;
+            color: #666;
+            margin-left: 10px;
+        }
+        #filterInput {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .controls button {
+            background-color: #0366d6;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .controls button:hover {
+            background-color: #0550ae;
+        }
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .controls {
+                flex-direction: column;
+            }
+            .controls button {
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>My GitHub Website</h1>
+        <p class="site-description">Automatically generated site navigation</p>
+    </header>
+
+    <div class="controls">
+        <input type="text" id="filterInput" placeholder="Filter pages...">
+        <div>
+            <button id="expandAll">Expand All</button>
+            <button id="collapseAll">Collapse All</button>
+        </div>
+    </div>
+
+    <div class="navigation-container">
+        <h2>All Pages</h2>
+        <div id="sitemap" class="loading">Loading site pages...</div>
+    </div>
+
+    <footer>
+        <p>© <span id="current-year">2025</span> - My GitHub Website</p>
+        <p class="update-info">Generated on: <span id="generation-time"></span></p>
+        <script>
+            // Update the current year automatically
+            document.getElementById('current-year').textContent = new Date().getFullYear();
+            
+            // Set the generation time
+            document.getElementById('generation-time').textContent = new Date().toLocaleString();
+        </script>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sitemapElement = document.getElementById('sitemap');
+            const filterInput = document.getElementById('filterInput');
+            const expandAllButton = document.getElementById('expandAll');
+            const collapseAllButton = document.getElementById('collapseAll');
+            
+            // Get the repository information from the URL
+            const repoOwner = window.location.hostname.split('.')[0];
+            const repoName = window.location.pathname.split('/')[1] || '';
+            
+            // GitHub API URL to get repository contents
+            const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents`;
+            
+            // Folders and files structure
+            let structure = {};
+            
+            // Function to fetch directory contents
+            async function fetchDirectory(path = '') {
+                try {
+                    const response = await fetch(`${apiUrl}/${path}`);
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    
+                    const data = await response.json();
+                    
+                    // Process each item
+                    for (const item of data) {
+                        if (item.type === 'dir') {
+                            // Create folder in structure if it doesn't exist
+                            if (!structure[item.path]) {
+                                structure[item.path] = {
+                                    type: 'dir',
+                                    items: []
+                                };
+                            }
+                            
+                            // Recursively fetch subdirectory contents
+                            await fetchDirectory(item.path);
+                        } else if (item.type === 'file') {
+                            // Only include HTML, MD files and JavaScript files for links
+                            if (item.name.endsWith('.html') || 
+                                item.name.endsWith('.md') || 
+                                item.name.endsWith('.js') ||
+                                item.name.endsWith('.css')) {
+                                
+                                // Determine the parent directory
+                                const parentDir = item.path.includes('/') 
+                                    ? item.path.substring(0, item.path.lastIndexOf('/')) 
+                                    : '';
+                                
+                                // Create parent directory in structure if it doesn't exist
+                                if (parentDir && !structure[parentDir]) {
+                                    structure[parentDir] = {
+                                        type: 'dir',
+                                        items: []
+                                    };
+                                }
+                                
+                                // Add file to parent directory
+                                if (parentDir) {
+                                    structure[parentDir].items.push({
+                                        name: item.name,
+                                        path: item.path,
+                                        url: `/${repoName}/${item.path}`,
+                                        size: item.size,
+                                        sha: item.sha
+                                    });
+                                } else {
+                                    // Root level files
+                                    if (!structure['root']) {
+                                        structure['root'] = {
+                                            type: 'dir',
+                                            items: []
+                                        };
+                                    }
+                                    structure['root'].items.push({
+                                        name: item.name,
+                                        path: item.path,
+                                        url: `/${repoName}/${item.path}`,
+                                        size: item.size,
+                                        sha: item.sha
+                                    });
+                                }
+                            }
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error fetching directory:', error);
+                    sitemapElement.innerHTML = `
+                        <div class="error">
+                            <p>Error fetching repository contents. This could be due to:</p>
+                            <ul>
+                                <li>You're viewing this page locally instead of on GitHub Pages</li>
+                                <li>API rate limiting (GitHub limits unauthenticated requests)</li>
+                                <li>The repository is private</li>
+                            </ul>
+                            <p>Alternative approach: Try the crawl-based method below.</p>
+                        </div>
+                    `;
+                    
+                    // Fall back to crawl-based approach
+                    crawlWebsite();
+                }
+            }
+            
+            // Function to recursively build the sitemap HTML
+            function buildSitemap() {
+                let html = '<ul>';
+                
+                // Add root files first
+                if (structure['root']) {
+                    structure['root'].items.forEach(file => {
+                        const formattedSize = formatFileSize(file.size);
+                        html += `
+                            <li>
+                                <a href="${file.url}" target="_blank">${file.name}</a>
+                                <span class="file-size">${formattedSize}</span>
+                            </li>
+                        `;
+                    });
+                }
+                
+                // Process directories (excluding 'root')
+                Object.keys(structure)
+                    .filter(key => key !== 'root')
+                    .sort()
+                    .forEach(dirPath => {
+                        const dir = structure[dirPath];
+                        const dirName = dirPath.includes('/') 
+                            ? dirPath.substring(dirPath.lastIndexOf('/') + 1) 
+                            : dirPath;
+                        
+                        html += `
+                            <li>
+                                <div class="folder-name">📁 ${dirName}/</div>
+                                <ul>
+                        `;
+                        
+                        // Sort files alphabetically
+                        dir.items.sort((a, b) => a.name.localeCompare(b.name));
+                        
+                        dir.items.forEach(file => {
+                            const formattedSize = formatFileSize(file.size);
+                            html += `
+                                <li>
+                                    <a href="${file.url}" target="_blank">${file.name}</a>
+                                    <span class="file-size">${formattedSize}</span>
+                                </li>
+                            `;
+                        });
+                        
+                        html += `</ul></li>`;
+                    });
+                
+                html += '</ul>';
+                return html;
+            }
+
+            // Helper function to format file size
+            function formatFileSize(bytes) {
+                if (bytes < 1024) {
+                    return bytes + ' B';
+                } else if (bytes < 1024 * 1024) {
+                    return (bytes / 1024).toFixed(1) + ' KB';
+                } else {
+                    return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+                }
+            }
+            
+            // Alternative approach: Crawl the website if GitHub API doesn't work
+            async function crawlWebsite() {
+                sitemapElement.innerHTML = '<p>Attempting to crawl website pages...</p>';
+                
+                try {
+                    // Start with the homepage
+                    const baseUrl = window.location.origin + (repoName ? `/${repoName}` : '');
+                    const visitedUrls = new Set();
+                    const pagesToVisit = [baseUrl];
+                    const discoveredPages = [];
+                    
+                    // Simple crawler (limited by same-origin policy)
+                    while (pagesToVisit.length > 0 && discoveredPages.length < 100) {
+                        const currentUrl = pagesToVisit.shift();
+                        
+                        if (visitedUrls.has(currentUrl)) continue;
+                        visitedUrls.add(currentUrl);
+                        
+                        try {
+                            const response = await fetch(currentUrl);
+                            const html = await response.text();
+                            
+                            // Create a DOM parser
+                            const parser = new DOMParser();
+                            const doc = parser.parseFromString(html, 'text/html');
+                            
+                            // Extract page title
+                            const title = doc.querySelector('title')?.textContent || currentUrl;
+                            
+                            // Add to discovered pages
+                            discoveredPages.push({
+                                url: currentUrl,
+                                title: title
+                            });
+                            
+                            // Find links on the page
+                            const links = doc.querySelectorAll('a[href]');
+                            links.forEach(link => {
+                                let href = link.getAttribute('href');
+                                
+                                // Handle relative URLs
+                                if (href.startsWith('/')) {
+                                    href = window.location.origin + href;
+                                } else if (!href.startsWith('http')) {
+                                    href = new URL(href, currentUrl).href;
+                                }
+                                
+                                // Only add links from the same domain
+                                if (href.startsWith(window.location.origin) && 
+                                    !visitedUrls.has(href) && 
+                                    !pagesToVisit.includes(href)) {
+                                    pagesToVisit.push(href);
+                                }
+                            });
+                        } catch (error) {
+                            console.error(`Error fetching ${currentUrl}:`, error);
+                        }
+                    }
+                    
+                    // Display discovered pages
+                    if (discoveredPages.length > 0) {
+                        let html = '<ul>';
+                        discoveredPages.forEach(page => {
+                            html += `<li><a href="${page.url}" target="_blank">${page.title}</a></li>`;
+                        });
+                        html += '</ul>';
+                        sitemapElement.innerHTML = html;
+                    } else {
+                        sitemapElement.innerHTML = '<p>No pages were discovered. This might be due to cross-origin restrictions.</p>';
+                    }
+                } catch (error) {
+                    console.error('Error crawling website:', error);
+                    sitemapElement.innerHTML = `
+                        <div class="error">
+                            <p>Unable to crawl the website. Cross-origin restrictions likely prevent this method when running locally.</p>
+                            <p>For best results, deploy this page to your GitHub Pages site.</p>
+                        </div>
+                    `;
+                }
+            }
+            
+            // Function to handle filtering
+            function filterPages() {
+                const filterValue = filterInput.value.toLowerCase();
+                const items = document.querySelectorAll('#sitemap li');
+                
+                items.forEach(item => {
+                    const text = item.textContent.toLowerCase();
+                    if (text.includes(filterValue)) {
+                        item.style.display = '';
+                        // Make sure parent folders are visible
+                        let parent = item.parentElement;
+                        while (parent && parent.id !== 'sitemap') {
+                            parent.style.display = '';
+                            parent = parent.parentElement;
+                        }
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            }
+            
+            // Handle expand/collapse all
+            expandAllButton.addEventListener('click', () => {
+                document.querySelectorAll('#sitemap ul').forEach(ul => {
+                    ul.style.display = 'block';
+                });
+            });
+            
+            collapseAllButton.addEventListener('click', () => {
+                document.querySelectorAll('#sitemap ul').forEach(ul => {
+                    if (ul.parentElement.id !== 'sitemap') {
+                        ul.style.display = 'none';
+                    }
+                });
+            });
+            
+            // Event listener for filter input
+            filterInput.addEventListener('input', filterPages);
+            
+            // Start the process
+            fetchDirectory()
+                .then(() => {
+                    if (Object.keys(structure).length > 0) {
+                        sitemapElement.innerHTML = buildSitemap();
+                        
+                        // Add click handlers for folders
+                        document.querySelectorAll('.folder-name').forEach(folder => {
+                            folder.addEventListener('click', () => {
+                                const sublist = folder.nextElementSibling;
+                                sublist.style.display = sublist.style.display === 'none' ? 'block' : 'none';
+                            });
+                        });
+                    }
+                });
+        });
+    </script>
+</body>
+</html>
