@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<!-- 
+  ====================================================
+  YOGA ANURAG — WEBSITE
+  ====================================================
+  This is a single HTML file website.
+  You can open it in any browser (Chrome, Firefox, etc.)
+  
+  HOW TO EDIT:
+  - Open this file in Notepad, VS Code, or any text editor
+  - Find the section you want to change using the comments
+  - Edit the text between the HTML tags
+  - Save and refresh in browser to see changes
+  
+  QUICK FIND GUIDE (use Ctrl+F to search):
+  - Your name/title     → search "HERO SECTION"
+  - Phone number        → search "PHONE NUMBER"
+  - WhatsApp link       → search "wa.me"
+  - Session types       → search "SESSION CARDS"
+  - About/Bio text      → search "INSTRUCTOR BIO"
+  - Social links        → search "CONNECT LINKS"
+  - Footer text         → search "FOOTER"
+  ====================================================
+-->
+<html lang="en">
+<head>
+  <!-- 
+    HEAD SECTION
+    ============
+    Basic page settings. You can change:
+    - The browser tab title (the <title> tag below)
+    - The description that appears in Google search results (the "description" meta tag)
+  -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- CHANGE THIS: Description shown in Google search results -->
+  <meta name="description" content="Stay fit with refreshing online/offline yoga & meditation sessions by Anurag Sharma. Guiding since 2011. Kharar, Mohali, Chandigarh & online worldwide." />
+
+  <!-- CHANGE THIS: Text shown on the browser tab -->
+  <title>Yoga Anurag — Yoga · Meditation · Chess</title>
+
+  <!-- 
+    Google Fonts — loads the two fonts used on this page.
+    "Cormorant Garamond" = elegant serif font used for headings
+    "Inter" = clean modern font used for body text
+    Requires internet connection to load. If offline, browser uses default font.
+  -->
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300&family=Inter:wght@300;400&display=swap" rel="stylesheet" />
+
+  <style>
+    /* 
+      ====================================================
+      DESIGN VARIABLES (Colours & Fonts)
+      ====================================================
+      These are the colour codes used throughout the page.
+      Change a value here and it updates everywhere automatically.
+
+      HOW COLOURS WORK:
+      - Colours are written as hex codes like #7a9e7e
+      - You can pick colours at: https://htmlcolorcodes.com/color-picker/
+
+      COLOUR ROLES:
+      --sage   : main green accent colour (buttons, highlights, links)
+      --earth  : dark brown used for headings
+      --cream  : light warm background colour
+      --linen  : slightly darker than cream, used for borders/dividers
+      --muted  : grey used for smaller, less important text
+      --ink    : near-black used for main body text
+      --white  : pure white, used for card backgrounds
+    */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --sage:    #6b9b72; /* CHANGE: main green colour */
+      --sage-lt: #e8f2e9; /* CHANGE: very light green (hover backgrounds) */
+      --earth:   #3e2f23; /* CHANGE: dark brown for headings */
+      --cream:   #f6f3ee; /* CHANGE: page background colour */
+      --linen:   #e8e3db; /* CHANGE: border / divider colour */
+      --muted:   #9b9288; /* CHANGE: grey for secondary text */
+      --ink:     #2c2420; /* CHANGE: main text colour */
+      --white:   #ffffff; /* white */
+    }
+
+    html { scroll-behavior: smooth; } /* makes clicking nav links scroll smoothly */
+
+    /* 
+      BODY — overall page defaults 
+      font-size: 15px means 1rem = 15px everywhere
+    */
+    body {
+      background: var(--cream);
+      color: var(--ink);
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    /* removes underline from all links by default */
+    a { color: inherit; text-decoration: none; }
+
+
+    /* ====================================================
+       NAVIGATION BAR (top strip)
+       ====================================================
+       The bar that sticks to the top as you scroll.
+       "sticky" + "top:0" makes it stay fixed at the top.
+       backdrop-filter: blur gives the frosted-glass effect.
+    */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(246,243,238,0.92); /* slightly transparent cream */
+      backdrop-filter: blur(8px);         /* blurs content behind the nav */
+      border-bottom: 1px solid var(--linen);
+      padding: 0 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 52px; /* CHANGE: height of the nav bar */
+    }
+
+    /* Brand name on the left of the nav */
+    .nav-brand {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 400;
+      font-size: 1.15rem;   /* CHANGE: brand name size */
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--earth);
+    }
+
+    /* Nav links on the right side */
+    .nav-links {
+      display: flex;
+      gap: 1.5rem; /* CHANGE: space between nav links */
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 0.72rem; /* CHANGE: nav link text size */
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      transition: color 0.2s; /* smooth colour change on hover */
+    }
+    .nav-links a:hover { color: var(--sage); } /* colour when mouse hovers */
+
+
+    /* ====================================================
+       HERO SECTION (top of page — name & tagline)
+       ====================================================
+       The large heading area at the very top.
+       "clamp(3rem, 10vw, 5.5rem)" means:
+         min 3rem, scales with screen width, max 5.5rem
+       This makes the name automatically resize on mobile.
+    */
+    .hero {
+      text-align: center;
+      padding: 5rem 1.5rem 3.5rem; /* CHANGE: top/side/bottom spacing */
+      position: relative;
+    }
+
+    /* The short green line drawn under the hero content */
+    .hero::after {
+      content: '';
+      display: block;
+      width: 48px; height: 2px; /* CHANGE: width/thickness of the line */
+      background: var(--sage);
+      margin: 2.5rem auto 0;
+    }
+
+    /* The big name "ANURAG" */
+    .hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: clamp(3rem, 10vw, 5.5rem); /* auto-scales with screen size */
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--earth);
+      line-height: 1;
+      margin-bottom: 1rem;
+    }
+
+    /* "🧘 Yoga · 🧠 Meditation · ♟️ Chess" line */
+    .hero-sub {
+      font-size: 0.95rem;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+    }
+
+    /* "Stay fit & calm..." italic line */
+    .hero-tagline {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1.25rem; /* CHANGE: tagline text size */
+      color: var(--sage);
+      margin-bottom: 0.3rem;
+    }
+
+    /* "✨ Guiding since 2011..." small text */
+    .hero-since {
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+
+    /* ====================================================
+       BUTTONS (CTA = Call To Action)
+       ====================================================
+       Two button styles are used:
+       .btn-primary = filled green button (main action)
+       .btn-outline = bordered button (secondary action)
+    */
+    .cta-row {
+      display: flex;
+      gap: 0.75rem;      /* space between buttons */
+      justify-content: center;
+      flex-wrap: wrap;   /* wraps to next line on small screens */
+      padding: 2rem 1.5rem;
+    }
+
+    /* Base button styles shared by both types */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.7rem 1.4rem; /* CHANGE: button size (top/bottom, left/right) */
+      border-radius: 1px;
+      font-size: 0.78rem;     /* CHANGE: button text size */
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+
+    /* Green filled button */
+    .btn-primary {
+      background: var(--sage);
+      color: #fff;
+      border: 1px solid var(--sage);
+    }
+    .btn-primary:hover { background: #5a8760; border-color: #5a8760; }
+
+    /* Bordered button */
+    .btn-outline {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--linen);
+    }
+    .btn-outline:hover { border-color: var(--sage); color: var(--sage); }
+
+
+    /* ====================================================
+       SECTION — general layout for each content block
+       ====================================================
+       Every major section (Sessions, About, Connect, etc.)
+       uses these styles for consistent spacing.
+       .container limits the max width and centres content.
+    */
+    section { padding: 3.5rem 1.5rem; } /* CHANGE: vertical spacing of all sections */
+    section + section { border-top: 1px solid var(--linen); } /* line between sections */
+
+    /* Centres content and limits max width */
+    .container {
+      max-width: 780px; /* CHANGE: maximum width of content */
+      margin: 0 auto;
+    }
+
+    /* Small green label above each section title e.g. "What we offer" */
+    .section-label {
+      font-size: 0.68rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--sage);
+      margin-bottom: 1.2rem;
+    }
+
+    /* Large heading inside each section */
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 400;
+      font-size: 1.9rem;  /* CHANGE: section heading size */
+      color: var(--earth);
+      margin-bottom: 1.2rem;
+      line-height: 1.2;
+    }
+
+    /* Normal paragraph text */
+    p { color: #5a4f48; margin-bottom: 1rem; }
+    p:last-child { margin-bottom: 0; }
+
+
+    /* ====================================================
+       SESSION CARDS (Online / Group / Home / Corporate)
+       ====================================================
+       A 4-column grid of clickable cards.
+       "auto-fit, minmax(200px, 1fr)" means:
+         each card is at least 200px wide, but shares
+         space equally — automatically wraps on mobile.
+    */
+    .session-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1px;              /* gap shows the --linen background as grid lines */
+      background: var(--linen);
+      border: 1px solid var(--linen);
+      margin-top: 2rem;
+    }
+
+    /* Individual card */
+    .session-card {
+      background: var(--white);
+      padding: 1.5rem 1.25rem;
+      transition: background 0.2s;
+    }
+    .session-card:hover { background: var(--sage-lt); } /* light green on hover */
+    .session-card a { display: block; height: 100%; }   /* whole card is clickable */
+
+    /* Emoji icon at top of each card */
+    .session-icon { font-size: 1.6rem; margin-bottom: 0.6rem; }
+
+    /* Card title e.g. "Online" */
+    .session-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      color: var(--earth);
+      font-weight: 500;
+      margin-bottom: 0.3rem;
+    }
+
+    /* Card description text */
+    .session-desc { font-size: 0.8rem; color: var(--muted); line-height: 1.5; }
+
+
+    /* ====================================================
+       SUTRA BLOCK (dark band with Sanskrit quote)
+       ====================================================
+       The dark brown full-width band showing the yoga sutra.
+       This is the visual "signature" element of the design.
+    */
+    .sutra {
+      background: var(--earth); /* CHANGE: background colour of this band */
+      color: #e8ddd5;
+      padding: 3rem 2rem;
+      text-align: center;
+    }
+
+    /* The Sanskrit text */
+    .sutra-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(1.1rem, 3vw, 1.5rem);
+      letter-spacing: 0.04em;
+      line-height: 1.5;
+      color: #f0e8e0;
+    }
+
+    /* English translation below the Sanskrit */
+    .sutra-translation {
+      margin-top: 0.75rem;
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--sage);
+    }
+
+
+    /* ====================================================
+       YOUTUBE VIDEO EMBED
+       ====================================================
+       "padding-bottom: 56.25%" is the trick for responsive
+       16:9 video — it keeps the correct aspect ratio on
+       all screen sizes without a fixed height.
+    */
+    .video-wrap {
+      position: relative;
+      padding-bottom: 56.25%; /* 16:9 aspect ratio */
+      height: 0;
+      overflow: hidden;
+      margin-top: 2rem;
+      border: 1px solid var(--linen);
+    }
+    .video-wrap iframe {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      border: 0;
+    }
+
+
+    /* ====================================================
+       INSTRUCTOR / ABOUT SECTION
+       ====================================================
+       Two-column layout: photo on left, bio text on right.
+       On mobile (max-width: 600px) it stacks vertically.
+    */
+    .instructor-grid {
+      display: grid;
+      grid-template-columns: 180px 1fr; /* CHANGE: photo column width */
+      gap: 2rem;
+      align-items: start;
+      margin-top: 2rem;
+    }
+
+    /* Photo styling */
+    .instructor-photo img {
+      width: 100%;
+      border-radius: 1px;
+      filter: sepia(8%) brightness(1.02); /* subtle warm tone */
+      border: 1px solid var(--linen);
+    }
+
+    /* Credential badges row below bio text */
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 1rem;
+    }
+
+    /* Individual badge e.g. "Govt. Certified" */
+    .badge {
+      font-size: 0.68rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.25rem 0.6rem;
+      border: 1px solid var(--linen);
+      color: var(--muted);
+      border-radius: 1px;
+    }
+
+
+    /* ====================================================
+       CONNECT / LINKS SECTION
+       ====================================================
+       List of clickable rows for social media, blog, etc.
+       Each row has an icon on the left and label text.
+    */
+    .link-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem; /* CHANGE: space between link rows */
+      margin-top: 1.5rem;
+    }
+
+    /* Individual link row */
+    .link-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--linen);
+      border-radius: 1px;
+      font-size: 0.8rem;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: var(--muted);
+      transition: border-color 0.2s, color 0.2s, background 0.2s;
+    }
+    .link-row:hover {
+      border-color: var(--sage);
+      color: var(--sage);
+      background: var(--sage-lt);
+    }
+    .link-row svg { flex-shrink: 0; opacity: 0.55; }
+    .link-row:hover svg { opacity: 1; }
+
+
+    /* ====================================================
+       CONTACT BLOCK (bottom section before footer)
+       ====================================================
+       White background section with large phone number
+       and final call-to-action buttons.
+    */
+    .contact-block {
+      text-align: center;
+      padding: 3.5rem 1.5rem;
+      background: var(--white);
+      border-top: 1px solid var(--linen);
+    }
+    .contact-block .section-label { margin-bottom: 0.5rem; }
+
+    /* Large phone number display */
+    .phone-number {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.2rem;  /* CHANGE: phone number display size */
+      letter-spacing: 0.1em;
+      color: var(--earth);
+      display: block;
+      margin: 0.5rem 0 1.5rem;
+    }
+    .phone-number:hover { color: var(--sage); }
+
+
+    /* ====================================================
+       FOOTER (bottom strip)
+       ====================================================
+       Simple text footer with a few links.
+    */
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #c5bdb5;
+      border-top: 1px solid var(--linen);
+    }
+    footer a { color: var(--sage); }
+
+
+    /* ====================================================
+       MOBILE RESPONSIVENESS
+       ====================================================
+       Rules that apply only on small screens (under 600px).
+       - Hides the nav links (no room for them)
+       - Stacks the instructor photo above the bio text
+    */
+    @media (max-width: 600px) {
+      .nav-links { display: none; }  /* hide nav links on mobile */
+      .instructor-grid { grid-template-columns: 1fr; } /* single column */
+      .instructor-photo { max-width: 160px; } /* smaller photo on mobile */
+    }
+
+  </style>
+</head>
+<body>
+
+<!-- ====================================================
+     NAVIGATION BAR
+     ====================================================
+     The sticky bar at the top of the page.
+     
+     TO ADD A NEW NAV LINK:
+     Copy one <li> block and change the href and text.
+     
+     href="#sessions" scrolls to a section on this page
+     (matches the id="sessions" on a <section> tag below)
+     
+     href="https://..." opens an external website
+     target="_blank" opens it in a new tab
+     rel="noopener" is a security best practice for external links
+-->
+<nav>
+  <!-- CHANGE: brand name shown on the left of the nav bar -->
+  <span class="nav-brand">Yoga Anurag</span>
+
+  <ul class="nav-links">
+    <li><a href="#sessions">Sessions</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#connect">Connect</a></li>
+    <li><a href="https://yogaanurag.blogspot.com/2020/08/testimonials.html" target="_blank" rel="noopener">Reviews</a></li>
+    <li><a href="https://youtube.com/@yogaanurag" target="_blank" rel="noopener">YouTube</a></li>
+  </ul>
+</nav>
+
+
+<!-- ====================================================
+     HERO SECTION
+     ====================================================
+     The very first thing visitors see — your name, 
+     what you do, and a tagline.
+     
+     TO CHANGE:
+     - The emoji/practice line: edit .hero-sub paragraph
+     - The big name: edit the <h1> tag
+     - The tagline: edit .hero-tagline paragraph
+     - The "since" line: edit .hero-since paragraph
+-->
+<header class="hero">
+  <div class="container">
+
+    <!-- CHANGE: the line showing what you do (emojis + practices) -->
+    <p class="hero-sub">🧘 Yoga &nbsp;·&nbsp; 🧠 Meditation &nbsp;·&nbsp; ♟️ Chess</p>
+
+    <!-- CHANGE: your name (displayed very large) -->
+    <h1>Anurag</h1>
+
+    <!-- CHANGE: the main tagline / description -->
+    <p class="hero-tagline">Stay fit &amp; calm with refreshing yoga &amp; meditation</p>
+
+    <!-- CHANGE: years of experience and session types -->
+    <p class="hero-since">✨ Guiding since 2011 &nbsp;·&nbsp; 🏡 Online · Offline · Home Sessions</p>
+
+  </div>
+</header>
+
+
+<!-- ====================================================
+     HERO CALL-TO-ACTION BUTTONS
+     ====================================================
+     Three buttons just below the hero section.
+     
+     TO CHANGE WHATSAPP NUMBER:
+     Replace "916283266268" with your number (91 = India country code)
+     e.g. for +91 98765 43210 use: wa.me/919876543210
+     
+     TO CHANGE PHONE NUMBER:
+     Replace "+916283266268" in href="tel:+916283266268"
+     and also the visible text "+91 62832 66268"
+-->
+<div class="cta-row">
+
+  <!-- Primary (green) WhatsApp button -->
+  <a class="btn btn-primary" href="https://wa.me/916283266268" target="_blank" rel="noopener">
+    <!-- WhatsApp icon SVG — no need to change this -->
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+    <!-- CHANGE: button label text -->
+    WhatsApp Us
+  </a>
+
+  <!-- Secondary (outline) Call button -->
+  <!-- CHANGE: replace phone number in both href and visible text -->
+  <a class="btn btn-outline" href="tel:+916283266268">📞 Call +91 62832 66268</a>
+
+  <!-- Reviews link button -->
+  <a class="btn btn-outline" href="https://yogaanurag.blogspot.com/2020/08/testimonials.html" target="_blank" rel="noopener">★ Reviews</a>
+
+</div>
+
+
+<!-- ====================================================
+     SESSION CARDS SECTION
+     ====================================================
+     Four cards showing the types of sessions offered.
+     id="sessions" connects this to the nav link above.
+     
+     TO EDIT A CARD:
+     Find the card you want and change:
+     - The emoji in .session-icon
+     - The name in .session-name
+     - The description in .session-desc
+     - The href link (the URL it opens when clicked)
+     
+     TO ADD A NEW CARD:
+     Copy one complete <div class="session-card">...</div>
+     block and paste it after the last card.
+-->
+<section id="sessions">
+  <div class="container">
+
+    <!-- Section label (small green text above heading) -->
+    <p class="section-label">What we offer</p>
+
+    <!-- Section main heading -->
+    <h2 class="section-title">Sessions for Every Need</h2>
+
+    <!-- Section description paragraph -->
+    <!-- CHANGE: edit this text as needed -->
+    <p>Running continuously since 2011 with top ratings in Google search. Sessions are 5 days a week, 40–45 minutes each, in both morning and evening slots. Fees are reasonable and vary by distance, time slot, and group size.</p>
+
+    <!-- THE FOUR SESSION CARDS -->
+    <div class="session-grid">
+
+      <!-- CARD 1: Online Sessions -->
+      <div class="session-card">
+        <a href="https://yogaanurag.blogspot.com/2020/08/online.html" target="_blank" rel="noopener">
+          <div class="session-icon">🌐</div>                  <!-- CHANGE: emoji -->
+          <div class="session-name">Online</div>              <!-- CHANGE: card title -->
+          <div class="session-desc">Join from anywhere in the world, anytime, on just your phone.</div>  <!-- CHANGE: description -->
+        </a>
+      </div>
+
+      <!-- CARD 2: Group Sessions -->
+      <div class="session-card">
+        <a href="https://yogaanurag.blogspot.com/2020/08/group.html" target="_blank" rel="noopener">
+          <div class="session-icon">👥</div>
+          <div class="session-name">Group</div>
+          <div class="session-desc">Regular sessions at venues in Kharar & nearby. Form your own group in your society.</div>
+        </a>
+      </div>
+
+      <!-- CARD 3: Home Sessions -->
+      <div class="session-card">
+        <a href="https://yogaanurag.blogspot.com/2020/08/home.html" target="_blank" rel="noopener">
+          <div class="session-icon">🏡</div>
+          <div class="session-name">Home</div>
+          <div class="session-desc">Personal sessions at your residence with individual attention.</div>
+        </a>
+      </div>
+
+      <!-- CARD 4: Corporate Sessions -->
+      <div class="session-card">
+        <a href="https://yogaanurag.blogspot.com/2020/08/corporate.html" target="_blank" rel="noopener">
+          <div class="session-icon">🏢</div>
+          <div class="session-name">Corporate</div>
+          <div class="session-desc">Well-being sessions for employees. Experienced with multiple MNCs.</div>
+        </a>
+      </div>
+
+    </div><!-- end session-grid -->
+
+    <!-- Small note below cards listing venue names -->
+    <!-- CHANGE: add or remove venue names as needed -->
+    <p style="margin-top:1.5rem; font-size:0.82rem; color:var(--muted);">
+      Venues include: Jammuna Apartments, TDI Wellington Heights, Sunny Enclave, Shivalik City, SBP Homes, Acme Heights and more.
+      Also experienced with schools, colleges &amp; drug de-addiction centres.
+    </p>
+
+  </div>
+</section>
+
+
+<!-- ====================================================
+     SUTRA BAND (dark background quote section)
+     ====================================================
+     The dark brown full-width band with the Sanskrit sutra.
+     This appears between Sessions and Video sections.
+     
+     CHANGE: the Sanskrit text and/or the English translation below it.
+-->
+<div class="sutra">
+  <!-- CHANGE: Sanskrit / yoga quote -->
+  <p class="sutra-text">योग: चित्त वृत्ति निरोध:</p>
+  <!-- CHANGE: English translation or meaning -->
+  <p class="sutra-translation">Yoga is the settling of the mind — Patanjali</p>
+</div>
+
+
+<!-- ====================================================
+     VIDEO SECTION
+     ====================================================
+     Embeds a YouTube video.
+     
+     TO CHANGE THE VIDEO:
+     1. Go to the YouTube video you want
+     2. Click Share → Embed
+     3. Copy the URL from src="https://www.youtube.com/embed/VIDEOID"
+     4. Replace "TqJBvvcddQM" below with your video's ID
+        (the part after /embed/ in the embed URL)
+-->
+<section>
+  <div class="container">
+
+    <p class="section-label">Watch</p>
+    <h2 class="section-title">See a Session</h2>
+
+    <div class="video-wrap">
+      <!-- CHANGE: replace TqJBvvcddQM with your YouTube video ID -->
+      <iframe
+        src="https://www.youtube.com/embed/TqJBvvcddQM"
+        title="Yoga Anurag session"
+        allowfullscreen
+        loading="lazy">
+      </iframe>
+    </div>
+
+    <!-- CHANGE: YouTube channel link and display text -->
+    <p style="margin-top:1rem; font-size:0.8rem; color:var(--muted);">
+      More videos on <a href="https://youtube.com/@yogaanurag" target="_blank" rel="noopener" style="color:var(--sage);">YouTube/@yogaanurag</a>
+    </p>
+
+  </div>
+</section>
+
+
+<!-- ====================================================
+     ABOUT / INSTRUCTOR SECTION
+     ====================================================
+     Two-column layout: photo on left, bio text on right.
+     id="about" connects to the nav link.
+     
+     TO CHANGE THE PHOTO:
+     Replace the src="..." URL in the <img> tag with:
+     - A direct image URL (https://...)
+     - Or a local file path if hosting yourself (e.g. images/photo.jpg)
+     
+     TO CHANGE THE BIO:
+     Edit the <p> paragraphs inside .instructor-grid
+     
+     TO ADD/REMOVE BADGES:
+     Each <span class="badge"> is one credential tag.
+     Copy, edit, or delete them as needed.
+-->
+<section id="about">
+  <div class="container">
+
+    <p class="section-label">The Instructor</p>
+
+    <!-- CHANGE: instructor name -->
+    <h2 class="section-title">Anurag Sharma</h2>
+
+    <div class="instructor-grid">
+
+      <!-- LEFT COLUMN: instructor photo -->
+      <div class="instructor-photo">
+        <!-- CHANGE: replace src with your photo URL or file path -->
+        <img
+          src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhl3avRYgh87I6BaJcFkTtvA2le6r3rYSuOHhNMWzYSMoAfyLW4ov1462WW5BKFLOuijfdZqfeHK7zHIzOQqevcax9lTIkTJRV4K0IAsnQzp0_mGr_qdSQk1zv1OLQ2783Sb-Jx-IBL4uii/s320/IMG_20180810_105759.jpg"
+          alt="Anurag Sharma — Yoga Instructor"
+          loading="lazy" />
+      </div>
+
+      <!-- RIGHT COLUMN: bio text and badges -->
+      <div>
+
+        <!-- CHANGE: edit these paragraphs with the instructor's bio -->
+        <p>Government-certified yoga instructor, practising since 2001 and teaching since 2011. Trained across leading institutions including Art of Living, Vipassana Centre, Patanjali, Chandigarh College of Yoga, and Chandigarh Administration.</p>
+
+        <p>Has taught in government schools and private colleges in Kharar and Mohali, and conducted weekly sessions at hospitals in Chandigarh including PGI's drug &amp; alcohol de-addiction centre.</p>
+
+        <p>Every year serves as Master Yoga Trainer for Chandigarh Administration, preparing participants for the International Yoga Day event. Currently running regular sessions in residential societies of Kharar and nearby areas.</p>
+
+        <p>Also teaches <strong>Meditation, Pranayama, Jal Neti</strong> and other shatkarmas.</p>
+
+        <!-- CREDENTIAL BADGES -->
+        <!-- CHANGE: add, remove, or rename badge labels as needed -->
+        <div class="badge-row">
+          <span class="badge">Govt. Certified</span>
+          <span class="badge">Since 2001</span>
+          <span class="badge">Art of Living</span>
+          <span class="badge">Vipassana</span>
+          <span class="badge">Patanjali</span>
+          <span class="badge">Chandigarh Admin</span>
+          <span class="badge">IYD Master Trainer</span>
+        </div>
+
+      </div>
+    </div><!-- end instructor-grid -->
+
+  </div>
+</section>
+
+
+<!-- ====================================================
+     CONNECT / SOCIAL LINKS SECTION
+     ====================================================
+     A list of all your online presence links.
+     id="connect" connects to the nav link.
+     
+     EACH LINK ROW has:
+     - An SVG icon (the small graphic on the left)
+     - The href="..." URL it opens
+     - Label text (the visible text of the link)
+     
+     TO CHANGE A LINK:
+     Find the row and update the href and/or label text.
+     
+     TO ADD A NEW LINK:
+     Copy any <a class="link-row"> block and paste it.
+     You can reuse any existing SVG icon or remove it.
+     
+     TO REMOVE A LINK:
+     Delete the entire <a class="link-row">...</a> block.
+-->
+<section id="connect">
+  <div class="container">
+
+    <p class="section-label">Find us</p>
+    <h2 class="section-title">Connect</h2>
+
+    <!-- CHANGE: edit this intro text -->
+    <p>Reach out to join a session, ask about fees, or find the nearest venue.</p>
+
+    <div class="link-list">
+
+      <!-- LINK 1: WhatsApp -->
+      <!-- CHANGE: replace 916283266268 with your WhatsApp number -->
+      <a class="link-row" href="https://wa.me/916283266268" target="_blank" rel="noopener">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+        <!-- CHANGE: link label text -->
+        WhatsApp — wa.me/916283266268
+      </a>
+
+      <!-- LINK 2: YouTube -->
+      <!-- CHANGE: replace @yogaanurag with your YouTube handle -->
+      <a class="link-row" href="https://youtube.com/@yogaanurag" target="_blank" rel="noopener">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+        YouTube — @yogaanurag
+      </a>
+
+      <!-- LINK 3: Blog -->
+      <!-- CHANGE: replace with your blog URL -->
+      <a class="link-row" href="https://yogaanurag.blogspot.com" target="_blank" rel="noopener">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M21.976 24H2.026C.9 24 0 23.1 0 21.976V2.026C0 .9.9 0 2.026 0h19.95C23.1 0 24 .9 24 2.026v19.95C24 23.1 23.1 24 21.976 24zM13.5 5.5H8A2.5 2.5 0 005.5 8v8A2.5 2.5 0 008 18.5h8a2.5 2.5 0 002.5-2.5v-3.5a1 1 0 00-1-1h-1a1 1 0 00-1 1v2.5a.5.5 0 01-.5.5H8.5a.5.5 0 01-.5-.5v-7a.5.5 0 01.5-.5H13.5a1 1 0 001-1v-1a1 1 0 00-1-1zm3 3a1 1 0 100-2 1 1 0 000 2z"/></svg>
+        Blog — yogaanurag.blogspot.com
+      </a>
+
+      <!-- LINK 4: Twitter / X -->
+      <!-- CHANGE: replace yogaanurag with your Twitter handle -->
+      <a class="link-row" href="https://twitter.com/yogaanurag" target="_blank" rel="noopener">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        Twitter / X — @yogaanurag
+      </a>
+
+      <!-- LINK 5: Contact Form (on the blog) -->
+      <a class="link-row" href="https://yogaanurag.blogspot.com/2020/08/contact.html" target="_blank" rel="noopener">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        Contact Form
+      </a>
+
+      <!-- LINK 6: Reviews / Testimonials -->
+      <a class="link-row" href="https://yogaanurag.blogspot.com/2020/08/testimonials.html" target="_blank" rel="noopener">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        Reviews &amp; Testimonials
+      </a>
+
+      <!-- LINK 7: Linktree (all links in one place) -->
+      <a class="link-row" href="https://linktr.ee/anuragtree" target="_blank" rel="noopener">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+        All Links — linktr.ee/anuragtree
+      </a>
+
+      <!-- LINK 8: AI Assistant -->
+      <a class="link-row" href="https://yogaanurag.blogspot.com/2024/11/ai.html" target="_blank" rel="noopener">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+        AI Assistant
+      </a>
+
+    </div><!-- end link-list -->
+
+    <!-- Language links at the bottom of the Connect section -->
+    <!-- CHANGE: add or remove language links as needed -->
+    <p style="margin-top:1rem; font-size:0.78rem; color:var(--muted);">
+      Also available in
+      <a href="https://yogaanurag.blogspot.com/2020/11/hindi.html" target="_blank" rel="noopener" style="color:var(--sage);">हिंदी</a>
+      &amp;
+      <a href="https://yogaanurag.blogspot.com/2020/11/punjabi.html" target="_blank" rel="noopener" style="color:var(--sage);">ਪੰਜਾਬੀ</a>
+    </p>
+
+  </div>
+</section>
+
+
+<!-- ====================================================
+     CONTACT BLOCK (bottom contact area)
+     ====================================================
+     White section with large phone number and final buttons.
+     Appears just before the footer.
+     
+     CHANGE: phone number in both the href and visible text,
+     and the WhatsApp link number.
+-->
+<div class="contact-block">
+
+  <p class="section-label">Get in touch</p>
+
+  <!-- CHANGE: phone number (update href AND the visible number text) -->
+  <a class="phone-number" href="tel:+916283266268">+91 62832 66268</a>
+
+  <div class="cta-row" style="padding-top:0;">
+
+    <!-- CHANGE: WhatsApp number in href -->
+    <a class="btn btn-primary" href="https://wa.me/916283266268" target="_blank" rel="noopener">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+      Chat on WhatsApp
+    </a>
+
+    <!-- CHANGE: phone number in href -->
+    <a class="btn btn-outline" href="tel:+916283266268">Call Now</a>
+
+  </div>
+</div>
+
+
+<!-- ====================================================
+     FOOTER
+     ====================================================
+     The small strip at the very bottom of the page.
+     CHANGE: edit the links or © copyright text as needed.
+-->
+<footer>
+  <p>
+    <!-- CHANGE: copyright name or year -->
+    © Yoga Anurag &nbsp;·&nbsp;
+    <a href="https://yogaanurag.blogspot.com" target="_blank" rel="noopener">Blog</a> &nbsp;·&nbsp;
+    <a href="https://youtube.com/@yogaanurag" target="_blank" rel="noopener">YouTube</a> &nbsp;·&nbsp;
+    <a href="https://yogakharar.blogspot.com/p/home-page.html" target="_blank" rel="noopener">Mirror Site</a> &nbsp;·&nbsp;
+    <a href="https://yogaanurag.blogspot.com/2020/08/contact.html" target="_blank" rel="noopener">Contact</a>
+  </p>
+</footer>
+
+
+</body>
+</html>
