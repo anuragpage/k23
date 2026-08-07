@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Anurag · Spiritual Seeker</title>
+  <!-- Simple, minimal, beautiful – easy to read and modify -->
+  <style>
+    /* Global reset & soft aesthetic */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #faf9f6;
+      font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 2rem 1.5rem;
+      color: #2e2e2c;
+      line-height: 1.6;
+    }
+
+    /* Soft card – everything lives in one gentle container */
+    .page {
+      max-width: 580px;
+      width: 100%;
+      background: #ffffff;
+      border-radius: 2.5rem;
+      padding: 2.8rem 2.2rem;
+      box-shadow: 0 20px 35px rgba(0, 0, 0, 0.03), 0 8px 18px rgba(0, 0, 0, 0.04);
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 2.4rem;
+    }
+
+    /* Typography */
+    h1 {
+      font-size: 2.8rem;
+      font-weight: 450;
+      letter-spacing: -0.5px;
+      color: #1e1e1c;
+      margin-bottom: 0.1rem;
+      line-height: 1.2;
+    }
+
+    .subtitle {
+      font-size: 1.3rem;
+      font-weight: 350;
+      color: #5b5b55;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      margin-top: -0.2rem;
+    }
+
+    .subtitle span {
+      font-size: 1.5rem;
+    }
+
+    /* Section titles – elegant, minimal */
+    h2 {
+      font-size: 1.1rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #9b9b8a;
+      margin-bottom: 0.6rem;
+      border-bottom: 1px solid #ecebe6;
+      padding-bottom: 0.4rem;
+    }
+
+    /* Bio & text blocks */
+    .bio-text {
+      font-size: 1rem;
+      color: #3b3b36;
+      font-weight: 350;
+      background: #fbfaf7;
+      padding: 1rem 1.2rem;
+      border-radius: 1.4rem;
+      line-height: 1.7;
+      border: 1px solid #f0efe8;
+    }
+
+    /* Invisible clickable links – visually hidden text but clickable area */
+    .hidden-link {
+      display: inline-block;
+      text-decoration: none;
+      color: inherit;
+      font-weight: 400;
+      border-bottom: 1px dotted transparent;
+      transition: border-color 0.2s;
+    }
+
+    /* Generic link style for clickable rows – smooth, no visible link clutter */
+    a.clean-link {
+      text-decoration: none;
+      color: #4a4a42;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-weight: 400;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.2s, color 0.2s;
+      padding: 0.15rem 0;
+    }
+
+    a.clean-link:hover {
+      border-bottom: 1px solid #b7b7a8;
+      color: #1f1f1c;
+    }
+
+    /* Rows for links / contact items */
+    .info-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 0.4rem 0.8rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .label-mini {
+      font-weight: 400;
+      color: #7b7b6e;
+      font-size: 0.95rem;
+      min-width: 85px;
+      letter-spacing: 0.2px;
+    }
+
+    .link-group {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 1.2rem;
+    }
+
+    hr {
+      border: none;
+      border-top: 1px solid #eae7df;
+      margin: 0.2rem 0 0.8rem 0;
+    }
+
+    /* Simple top & home navigation */
+    .nav-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 0.2rem;
+      font-size: 0.9rem;
+    }
+
+    .nav-row a {
+      text-decoration: none;
+      color: #8b8b7a;
+      font-weight: 400;
+      transition: color 0.2s;
+    }
+
+    .nav-row a:hover {
+      color: #3f3f36;
+    }
+
+    /* Small subtle icon replacements – using text/emoji for minimalism */
+    .subtle-icon {
+      font-size: 1rem;
+      filter: grayscale(0.2);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 450px) {
+      .page {
+        padding: 2rem 1.5rem;
+        border-radius: 2rem;
+      }
+      h1 {
+        font-size: 2.4rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page" id="top">
+    
+    <!-- Heading + Subheading -->
+    <div style="display: flex; flex-direction: column; gap: 0.1rem;">
+      <h1>Anurag</h1>
+      <div class="subtitle">
+        Spiritual Seeker <span>🪷</span>
+      </div>
+    </div>
+
+    <!-- Home page link (invisible but clickable – as per instructions: links given in brackets should be clickable but not displayed) 
+         The text "Home page" is not displayed as a visible label; we create an empty clickable region that leads to home.
+         However, to keep it absolutely clean and minimal, we put a hidden link that still works. It's placed right after heading as requested. 
+    -->
+    <div style="height: 0; overflow: hidden; line-height: 0;">
+      <a href="https://anuragpage.github.io/go" style="display:inline-block; width:0; height:0; overflow:hidden;">Home page</a>
+    </div>
+
+    <!-- Latest section -->
+    <div>
+      <h2>Latest</h2>
+      <div style="display: flex; align-items: baseline; flex-wrap: wrap; gap: 0.4rem;">
+        <span style="font-weight: 380; color: #3f3f38;">Online sessions are also effective.</span>
+        <!-- Read more link: clickable but the link text not displayed as per "links given in brackets should clickable but not displayed"? 
+             The instruction: "Read more here (link)" – we make the words "Read more here" invisible? 
+             Actually requirement: "links given in brackets should clickable but not displayed." 
+             So the URL itself should be hidden but clickable. We'll use a hidden link with no visible text. 
+             But "Read more here" is instruction text? We'll keep "Read more here" visible as minimal hint, but the link inside is clickable yet no URL shown.
+             Better: create a clickable area that contains no visible URL, just an empty anchor with aria-label. 
+        -->
+        <!-- We make the whole phrase "Online sessions are also effective." optionally clickable? No, need separate link.
+             We'll place a hidden link after the sentence: clickable but not displayed.
+        -->
+        <a href="https://yogaanurag.blogspot.com/2020/08/online.html" style="display:inline-block; width:0; height:0; overflow:hidden; vertical-align:bottom;" aria-hidden="true">online</a>
+        <!-- Also provide a tiny subtle indicator for accessibility: a small invisible dot that is clickable? 
+             But we must follow "links given in brackets should clickable but not displayed." So the link exists in DOM but no visible text.
+             We'll add a hidden link with zero dimensions. 
+        -->
+      </div>
+      <!-- Additional hidden link to ensure clickable area exists, using a zero-width space approach. -->
+      <span style="position: relative; display: inline-block; width: 0; height: 0; overflow: hidden;">
+        <a href="https://yogaanurag.blogspot.com/2020/08/online.html" style="position: absolute; width: 1px; height: 1px; overflow: hidden;">Read more</a>
+      </span>
+      <!-- For better UX, also make the phrase "Read more here" invisible but we keep a subtle clickable hint? 
+           The user might want to click. I'll add an invisible link that wraps a zero-width space. 
+      -->
+    </div>
+
+    <!-- My Bio -->
+    <div>
+      <h2>My Bio</h2>
+      <div class="bio-text">
+        I’m Anurag Sharma, a spiritual seeker at heart, exploring life, consciousness, inner peace, and the deeper questions of existence. My journey has taken me through yoga, meditation, spirituality, and self-inquiry, while chess continues to fascinate me as an exploration of strategy, creativity, and the mind. I enjoy learning, experiencing, and sharing what I discover along the way—always remaining a student first.
+      </div>
+    </div>
+
+    <!-- Follow us -->
+    <div>
+      <h2>Follow us</h2>
+      <div class="info-row">
+        <span class="label-mini">Instagram</span>
+        <div class="link-group">
+          <!-- link clickable, URL not displayed -->
+          <a href="https://www.instagram.com/@yogaanuragpage" class="clean-link" style="border-bottom: none;">
+            <span style="display: none;">Instagram</span>
+            <!-- invisible link text: we use a tiny transparent character? 
+                 Better: use a span with zero width but still clickable. 
+                 We'll set the anchor to have no visible text, but make it clickable via a pseudo-element or just let it be an empty link with dimensions.
+            -->
+            <span style="opacity: 0; font-size: 0;">🔗</span>
+          </a>
+          <!-- Since link should be clickable but not displayed, we hide the text inside. 
+               We'll create an invisible anchor with accessible name.
+          -->
+          <a href="https://www.instagram.com/@yogaanuragpage" style="display:inline-block; width:0; height:0; overflow:hidden;" aria-label="Instagram">Instagram</a>
+        </div>
+        <span style="margin-left: 0.5rem;">/</span>
+        <span class="label-mini" style="margin-left:0.2rem;">Youtube</span>
+        <div class="link-group">
+          <a href="https://youtube.com/@yogaanurag" style="display:inline-block; width:0; height:0; overflow:hidden;" aria-label="Youtube">Youtube</a>
+        </div>
+      </div>
+      <!-- For better usability, we also include subtle visible icons but no URL text. 
+           The requirement: links clickable but not displayed. So we make the anchor text hidden.
+           I'll add a second set with proper hidden links but also minimal visible labels without URLs.
+      -->
+      <div style="display: flex; gap: 2rem; align-items: center; margin-top: 0.3rem;">
+        <!-- Instagram clickable invisible link -->
+        <a href="https://www.instagram.com/@yogaanuragpage" style="text-decoration: none; color: #5b5b4f; display: inline-flex; align-items: center; gap: 0.2rem;">
+          <span style="font-size: 0.9rem;">📷</span>
+          <span style="font-weight: 350;">Instagram</span>
+        </a>
+        <!-- Youtube clickable invisible link (URL hidden) -->
+        <a href="https://youtube.com/@yogaanurag" style="text-decoration: none; color: #5b5b4f; display: inline-flex; align-items: center; gap: 0.2rem;">
+          <span style="font-size: 0.9rem;">▶️</span>
+          <span style="font-weight: 350;">Youtube</span>
+        </a>
+      </div>
+      <div style="height:0; overflow:hidden;">
+        <!-- purely hidden links for screen readers / additional compliance -->
+        <a href="https://www.instagram.com/@yogaanuragpage">Instagram</a>
+        <a href="https://youtube.com/@yogaanurag">Youtube</a>
+      </div>
+    </div>
+
+    <!-- WhatsApp/Call -->
+    <div>
+      <h2>WhatsApp / Call</h2>
+      <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 1.5rem; margin-top: 0.2rem;">
+        <div style="display: flex; align-items: center; gap: 0.3rem;">
+          <span style="font-size: 0.95rem;">💬</span>
+          <!-- WhatsApp link: clickable, no URL displayed -->
+          <a href="https://wa.me/916283266268" style="text-decoration: none; color: #3f3f36; font-weight: 400;">WhatsApp</a>
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.3rem;">
+          <span style="font-size: 0.95rem;">📞</span>
+          <!-- Call link: clickable, number not displayed as link but we show label -->
+          <a href="tel:+916283266268" style="text-decoration: none; color: #3f3f36; font-weight: 400;">Call</a>
+        </div>
+      </div>
+      <!-- Hidden raw links to satisfy "links given in brackets should clickable but not displayed" 
+           We hide the actual URL text completely. -->
+      <div style="height:0; overflow:hidden; opacity:0;">
+        <a href="https://wa.me/916283266268">WhatsApp</a>
+        <a href="tel:+916283266268">Call</a>
+      </div>
+    </div>
+
+    <!-- Home page link (again, as per content: Home page (link) at end) 
+         We place hidden clickable home link, invisible. -->
+    <div style="height:0; overflow:hidden;">
+      <a href="https://anuragpage.github.io/go">Home page</a>
+    </div>
+
+    <!-- Top (go to top of page) link – also hidden but clickable? 
+         The content says: "Top ( go to top of page)" – we make a hidden anchor that goes to #top.
+    -->
+    <div style="height:0; overflow:hidden;">
+      <a href="#top">Top</a>
+    </div>
+
+    <!-- Subtle visible navigation row for Home & Top (minimal, clean) -->
+    <div class="nav-row">
+      <a href="https://anuragpage.github.io/go" style="display: flex; align-items: center; gap: 0.2rem;">
+        <span>🏠</span> <span style="font-weight: 350;">Home</span>
+      </a>
+      <a href="#top" style="display: flex; align-items: center; gap: 0.2rem;">
+        <span>⬆️</span> <span style="font-weight: 350;">Top</span>
+      </a>
+    </div>
+
+    <!-- Tiny footnote for aesthetic -->
+    <div style="color: #c2c2b6; font-size: 0.7rem; text-align: center; margin-top: 0.2rem; letter-spacing: 0.3px;">
+      ✦ stillness within ✦
+    </div>
+
+  </div>
+
+  <!-- Additional hidden links to guarantee clickable invisible links as per spec:
+       Instagram, Youtube, WhatsApp, Call, Home, Top all have invisible anchors 
+       already placed above. Also the "Read more here" link is hidden. 
+  -->
+</body>
+</html>
