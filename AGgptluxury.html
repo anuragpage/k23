@@ -1,0 +1,522 @@
+<!--
+Prompt: Create a more luxurious, classy and elegant version of the Anurag personal one-page website,
+with a beautiful hero area, lotus ornaments/dividers and premium typography while keeping it lightweight.
+Indian Date: 08 August 2026
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Anurag — Spiritual Seeker</title>
+
+  <style>
+
+    /* =================================
+       COLORS — easiest place to edit
+    ================================= */
+
+    :root {
+      --bg: #f8f7f2;
+      --text: #4c514d;
+      --heading: #264b3a;
+      --green: #718f7e;
+      --green-light: #a5b8ab;
+      --line: #dedfd9;
+      --soft: #f1f2ed;
+    }
+
+
+    /* =================================
+       BASIC
+    ================================= */
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+
+      font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+      line-height: 1.85;
+    }
+
+    .page {
+      max-width: 740px;
+      margin: auto;
+      padding: 0 30px 50px;
+    }
+
+
+    /* =================================
+       HERO
+    ================================= */
+
+    .hero {
+      min-height: 72vh;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      text-align: center;
+
+      padding: 70px 0;
+    }
+
+    .lotus {
+      font-size: 1.8rem;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      margin: 0;
+
+      color: var(--heading);
+
+      font-size: 4rem;
+      font-weight: 400;
+
+      letter-spacing: 5px;
+    }
+
+    .subtitle {
+      margin: 10px 0 30px;
+
+      color: #7c837e;
+
+      font-size: 1.05rem;
+      font-style: italic;
+
+      letter-spacing: 1.5px;
+    }
+
+
+    /* =================================
+       ORNAMENT
+    ================================= */
+
+    .ornament {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      width: 150px;
+      margin: 25px auto;
+    }
+
+    .ornament::before,
+    .ornament::after {
+      content: "";
+
+      height: 1px;
+      flex: 1;
+
+      background: var(--line);
+    }
+
+    .ornament span {
+      margin: 0 12px;
+
+      color: var(--green-light);
+
+      font-size: 0.8rem;
+    }
+
+
+    /* =================================
+       SECTIONS
+    ================================= */
+
+    section {
+      padding: 55px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    h2 {
+      margin: 0 0 22px;
+
+      color: var(--heading);
+
+      font-size: 1.15rem;
+      font-weight: 500;
+
+      letter-spacing: 2px;
+    }
+
+    p {
+      margin: 0 0 14px;
+    }
+
+
+    /* =================================
+       LATEST
+    ================================= */
+
+    .latest {
+      padding: 32px;
+
+      background: var(--soft);
+
+      border: 1px solid #e4e5df;
+      border-radius: 3px;
+    }
+
+    .latest h2 {
+      margin-bottom: 12px;
+    }
+
+
+    /* =================================
+       BIO
+    ================================= */
+
+    .bio {
+      font-size: 1.08rem;
+      line-height: 2;
+    }
+
+    .bio::first-letter {
+      float: left;
+
+      margin: 8px 8px 0 0;
+
+      color: var(--heading);
+
+      font-size: 3.2rem;
+      line-height: 0.75;
+    }
+
+
+    /* =================================
+       LINKS
+    ================================= */
+
+    a {
+      color: var(--green);
+
+      text-decoration: none;
+
+      transition: 0.25s ease;
+    }
+
+    a:hover {
+      color: var(--heading);
+    }
+
+    .simple-link {
+      display: inline-block;
+
+      padding-bottom: 2px;
+
+      border-bottom: 1px solid var(--green-light);
+    }
+
+    .simple-link:hover {
+      border-color: var(--heading);
+    }
+
+
+    /* =================================
+       SOCIAL / CONTACT
+    ================================= */
+
+    .links {
+      display: flex;
+      flex-wrap: wrap;
+
+      gap: 14px 35px;
+    }
+
+    .links a {
+      position: relative;
+
+      padding-bottom: 4px;
+    }
+
+    .links a::after {
+      content: "";
+
+      position: absolute;
+
+      left: 0;
+      bottom: 0;
+
+      width: 0;
+      height: 1px;
+
+      background: var(--heading);
+
+      transition: width 0.25s ease;
+    }
+
+    .links a:hover::after {
+      width: 100%;
+    }
+
+
+    /* =================================
+       FOOTER
+    ================================= */
+
+    footer {
+      padding: 38px 0 20px;
+
+      border-top: 1px solid var(--line);
+
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      font-size: 0.9rem;
+    }
+
+
+    /* =================================
+       FADE-IN
+    ================================= */
+
+    .hero,
+    section,
+    footer {
+      animation: appear 0.8s ease both;
+    }
+
+    @keyframes appear {
+
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+    }
+
+
+    /* =================================
+       MOBILE
+    ================================= */
+
+    @media (max-width: 600px) {
+
+      .page {
+        padding: 0 22px 35px;
+      }
+
+      .hero {
+        min-height: 65vh;
+        padding: 50px 0;
+      }
+
+      h1 {
+        font-size: 3rem;
+        letter-spacing: 4px;
+      }
+
+      .subtitle {
+        font-size: 1rem;
+      }
+
+      section {
+        padding: 42px 0;
+      }
+
+      .latest {
+        padding: 25px;
+      }
+
+      .bio {
+        font-size: 1rem;
+        line-height: 1.9;
+      }
+
+    }
+
+  </style>
+</head>
+
+
+<body id="top">
+
+  <main class="page">
+
+
+    <!-- =========================
+         HERO
+    ========================== -->
+
+    <header class="hero">
+
+      <div class="lotus">🪷</div>
+
+      <h1>Anurag</h1>
+
+      <div class="subtitle">
+        Spiritual Seeker
+      </div>
+
+      <div class="ornament">
+        <span>◆</span>
+      </div>
+
+      <a class="simple-link"
+         href="https://anuragpage.github.io/go">
+        Home page
+      </a>
+
+    </header>
+
+
+
+    <!-- =========================
+         LATEST
+    ========================== -->
+
+    <section>
+
+      <div class="latest">
+
+        <h2>Latest</h2>
+
+        <p>
+          Online sessions are also effective.
+        </p>
+
+        <a class="simple-link"
+           href="https://yogaanurag.blogspot.com/2020/08/online.html"
+           target="_blank"
+           rel="noopener">
+          Read more here →
+        </a>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- =========================
+         BIO
+    ========================== -->
+
+    <section>
+
+      <h2>My Bio</h2>
+
+      <p class="bio">
+        I’m Anurag Sharma, a spiritual seeker at heart, exploring life,
+        consciousness, inner peace, and the deeper questions of existence.
+        My journey has taken me through yoga, meditation, spirituality,
+        and self-inquiry, while chess continues to fascinate me as an
+        exploration of strategy, creativity, and the mind.
+        I enjoy learning, experiencing, and sharing what I discover along
+        the way—always remaining a student first.
+      </p>
+
+    </section>
+
+
+
+    <!-- ORNAMENT -->
+
+    <div class="ornament">
+      <span>🪷</span>
+    </div>
+
+
+
+    <!-- =========================
+         FOLLOW
+    ========================== -->
+
+    <section>
+
+      <h2>Follow us</h2>
+
+      <div class="links">
+
+        <a href="https://www.instagram.com/yogaanuragpage"
+           target="_blank"
+           rel="noopener">
+          Instagram ↗
+        </a>
+
+        <a href="https://www.youtube.com/@yogaanurag"
+           target="_blank"
+           rel="noopener">
+          YouTube ↗
+        </a>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- =========================
+         CONTACT
+    ========================== -->
+
+    <section>
+
+      <h2>WhatsApp / Call</h2>
+
+      <div class="links">
+
+        <a href="https://wa.me/916283266268"
+           target="_blank"
+           rel="noopener">
+          WhatsApp ↗
+        </a>
+
+        <a href="tel:+916283266268">
+          Call
+        </a>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- =========================
+         FOOTER
+    ========================== -->
+
+    <footer>
+
+      <a href="https://anuragpage.github.io/go">
+        ← Home page
+      </a>
+
+      <a href="#top">
+        Top ↑
+      </a>
+
+    </footer>
+
+
+  </main>
+
+</body>
+
+</html>
