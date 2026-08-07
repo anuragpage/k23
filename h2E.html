@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- ============================================================
+       HEAD SECTION: Basic settings for the webpage
+       ============================================================ -->
+
+  <!-- Tells the browser this is an HTML5 page -->
+  <meta charset="UTF-8" />
+
+  <!-- Makes the page look good on mobile phones -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- The title that appears on the browser tab -->
+  <title>Anurag — Yoga · Meditation · Chess</title>
+
+  <!-- Google Fonts: importing two beautiful fonts -->
+  <!-- 'Cormorant Garamond' is used for the big name/headings (elegant, calm feel) -->
+  <!-- 'Inter' is used for body text (clean, easy to read) -->
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ============================================================
+       GLOBAL STYLES: Applied to the whole page
+       ============================================================ */
+
+    /* Remove default spacing and use border-box sizing (standard practice) */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* Color palette — change these to change the look of the whole site */
+    :root {
+      --cream: #F7F4EF;        /* soft background color */
+      --ink: #1C1C1C;          /* almost-black text color */
+      --sage: #7A9E7E;         /* muted green — used as accent */
+      --sage-light: #EAF0EA;   /* very light green — for subtle backgrounds */
+      --muted: #888;           /* grey for less important text */
+      --border: #E0DDD8;       /* light beige for lines/borders */
+    }
+
+    /* Main body styling */
+    body {
+      background-color: var(--cream);   /* soft warm background */
+      color: var(--ink);                /* dark text */
+      font-family: 'Inter', sans-serif; /* clean readable font */
+      font-weight: 300;                 /* slightly light weight */
+      line-height: 1.7;                 /* comfortable line spacing */
+      min-height: 100vh;
+    }
+
+    /* ============================================================
+       NAVIGATION BAR: The menu at the top of the page
+       ============================================================ */
+    nav {
+      position: sticky;           /* stays at top when scrolling */
+      top: 0;
+      z-index: 100;               /* stays above other content */
+      background-color: var(--cream);
+      border-bottom: 1px solid var(--border);
+      padding: 18px 40px;
+      display: flex;
+      justify-content: space-between;  /* name on left, links on right */
+      align-items: center;
+    }
+
+    /* The "Anurag" brand name in the top-left of the nav */
+    .nav-brand {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      color: var(--ink);
+      text-decoration: none;
+    }
+
+    /* The nav links on the right: Home | Contact | Yoga | Chess */
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+
+    /* Each individual nav link */
+    .nav-links a {
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 0.82rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color 0.2s;     /* smooth color change on hover */
+    }
+
+    /* Nav link turns dark green when hovered */
+    .nav-links a:hover {
+      color: var(--sage);
+    }
+
+    /* ============================================================
+       HERO SECTION: The big top section of the page
+       ============================================================ */
+    #home {
+      padding: 100px 40px 80px;
+      max-width: 680px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    /* The big name "anurag" */
+    .hero-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3.5rem, 10vw, 6rem);   /* scales with screen size */
+      font-weight: 300;
+      letter-spacing: 0.12em;
+      line-height: 1;
+      color: var(--ink);
+      margin-bottom: 28px;
+    }
+
+    /* The emoji line: 🧘 Yoga 🧠 Meditation ♟️ Chess */
+    .hero-tagline {
+      font-size: 1rem;
+      letter-spacing: 0.04em;
+      color: var(--ink);
+      margin-bottom: 12px;
+    }
+
+    /* "Guiding for 15+ Years" line */
+    .hero-experience {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    /* "Online | Offline | Home Sessions" line */
+    .hero-modes {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 36px;
+    }
+
+    /* The phone number — styled as a clickable call link */
+    .hero-phone a {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      font-weight: 400;
+      color: var(--sage);
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      border-bottom: 1px solid var(--sage);
+      padding-bottom: 2px;
+      transition: opacity 0.2s;
+    }
+
+    /* Slight fade on hover */
+    .hero-phone a:hover {
+      opacity: 0.75;
+    }
+
+    /* ============================================================
+       DIVIDER: The thin horizontal line between sections
+       ============================================================ */
+    .divider {
+      width: 48px;
+      height: 1px;
+      background-color: var(--sage);
+      margin: 60px auto;
+    }
+
+    /* ============================================================
+       ABOUT / MAIN CONTENT SECTION
+       ============================================================ */
+    #contact {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 0 40px 80px;
+      text-align: center;
+    }
+
+    /* Section heading like "Connect With Us" */
+    .section-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--sage);
+      margin-bottom: 20px;
+    }
+
+    /* Main paragraph text inside sections */
+    .section-text {
+      font-size: 1rem;
+      color: #444;
+      line-height: 1.85;
+      margin-bottom: 28px;
+    }
+
+    /* Highlighted block: WhatsApp/Call buttons area */
+    .contact-highlight {
+      background-color: var(--sage-light);
+      border: 1px solid #C8DACC;
+      border-radius: 12px;
+      padding: 28px 32px;
+      margin: 32px 0;
+    }
+
+    /* Text inside the highlight box */
+    .contact-highlight p {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    /* The two action buttons: WhatsApp and Call */
+    .action-buttons {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;   /* wraps on small screens */
+    }
+
+    /* Each button */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: 50px;
+      font-size: 0.88rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: transform 0.15s, opacity 0.15s;
+      letter-spacing: 0.02em;
+    }
+
+    /* Button lifts slightly on hover */
+    .btn:hover {
+      transform: translateY(-1px);
+      opacity: 0.9;
+    }
+
+    /* WhatsApp button — green filled */
+    .btn-whatsapp {
+      background-color: var(--sage);
+      color: white;
+    }
+
+    /* Call button — outlined */
+    .btn-call {
+      background-color: transparent;
+      border: 1.5px solid var(--sage);
+      color: var(--sage);
+    }
+
+    /* ============================================================
+       FOLLOW US / SOCIAL LINKS SECTION
+       ============================================================ */
+    .social-section {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 0 40px 80px;
+      text-align: center;
+    }
+
+    /* Website link — shown prominently */
+    .website-link {
+      display: inline-block;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem;
+      color: var(--ink);
+      text-decoration: none;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 2px;
+      margin-bottom: 28px;
+      letter-spacing: 0.03em;
+      transition: border-color 0.2s;
+    }
+
+    .website-link:hover {
+      border-color: var(--sage);
+      color: var(--sage);
+    }
+
+    /* "Follow us on:" text */
+    .follow-text {
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin-bottom: 18px;
+    }
+
+    /* Row of social links */
+    .social-links {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* Each social link pill */
+    .social-links a {
+      text-decoration: none;
+      color: var(--ink);
+      font-size: 0.82rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 8px 18px;
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      transition: border-color 0.2s, color 0.2s, background 0.2s;
+    }
+
+    /* Social links turn green on hover */
+    .social-links a:hover {
+      border-color: var(--sage);
+      color: var(--sage);
+      background-color: var(--sage-light);
+    }
+
+    /* ============================================================
+       YOGA & CHESS SECTION: Two feature cards side by side
+       ============================================================ */
+    .sessions-section {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 0 40px 80px;
+    }
+
+    /* Grid: 2 cards side by side, stacks to 1 on mobile */
+    .sessions-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    /* Each card */
+    .session-card {
+      display: block;
+      text-decoration: none;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px 28px;
+      text-align: center;
+      transition: border-color 0.2s, transform 0.15s, background 0.2s;
+    }
+
+    /* Card lifts and turns green border on hover */
+    .session-card:hover {
+      border-color: var(--sage);
+      background-color: var(--sage-light);
+      transform: translateY(-2px);
+    }
+
+    /* Big emoji icon at top of card */
+    .card-icon {
+      font-size: 2.4rem;
+      margin-bottom: 14px;
+      display: block;
+    }
+
+    /* Card title like "Yoga & Meditation" */
+    .card-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem;
+      font-weight: 400;
+      color: var(--ink);
+      margin-bottom: 8px;
+    }
+
+    /* Short description below the card title */
+    .card-desc {
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* ============================================================
+       FOOTER: Bottom of the page
+       ============================================================ */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 40px;
+      text-align: center;
+    }
+
+    /* Footer nav links */
+    .footer-links {
+      display: flex;
+      gap: 24px;
+      justify-content: center;
+      list-style: none;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .footer-links a {
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 0.8rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: var(--sage);
+    }
+
+    /* Small copyright text */
+    .footer-copy {
+      font-size: 0.75rem;
+      color: #bbb;
+    }
+
+    /* ============================================================
+       MOBILE RESPONSIVE: Adjustments for small screens
+       ============================================================ */
+    @media (max-width: 600px) {
+      /* Reduce horizontal padding on mobile */
+      nav { padding: 16px 20px; }
+      #home { padding: 70px 24px 60px; }
+      #contact, .social-section, .sessions-section { padding-left: 24px; padding-right: 24px; }
+
+      /* Stack the nav brand and links vertically on very small screens */
+      nav { flex-direction: column; gap: 12px; }
+      .nav-links { gap: 16px; }
+
+      /* Stack yoga/chess cards vertically */
+      .sessions-grid { grid-template-columns: 1fr; }
+    }
+
+    /* Respect user's "reduce motion" preference (accessibility) */
+    @media (prefers-reduced-motion: reduce) {
+      * { transition: none !important; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ============================================================
+       NAVIGATION BAR
+       The sticky menu at the top with site name and page links
+       ============================================================ -->
+  <nav>
+
+    <!-- Brand name — clicking it scrolls back to top -->
+    <a href="#home" class="nav-brand">anurag</a>
+
+    <!-- Navigation links — each opens the section or a new tab -->
+    <ul class="nav-links">
+      <!-- "Home" scrolls to top of this page -->
+      <li><a href="#home">Home</a></li>
+
+      <!-- "Contact" scrolls to the contact section below -->
+      <li><a href="#contact">Contact</a></li>
+
+      <!-- "Yoga" opens the yoga page in a new tab -->
+      <li><a href="https://anuragpage.github.io/go/chess" target="_blank" rel="noopener">Yoga</a></li>
+
+      <!-- "Chess" opens the chess page in a new tab -->
+      <li><a href="https://anuragpage.github.io/go/chess" target="_blank" rel="noopener">Chess</a></li>
+    </ul>
+
+  </nav>
+
+
+  <!-- ============================================================
+       HERO / TOP SECTION
+       The big name and key info at the very top of the page
+       ============================================================ -->
+  <section id="home">
+
+    <!-- Big name heading -->
+    <h1 class="hero-name">anurag</h1>
+
+    <!-- Emoji + activity line -->
+    <p class="hero-tagline">🧘 Yoga &nbsp;·&nbsp; 🧠 Meditation &nbsp;·&nbsp; ♟️ Chess</p>
+
+    <!-- Years of experience -->
+    <p class="hero-experience">✨ Guiding for 15+ Years</p>
+
+    <!-- Session types offered -->
+    <p class="hero-modes">🏡 Online &nbsp;|&nbsp; Offline &nbsp;|&nbsp; Home Sessions</p>
+
+    <!-- Phone number: clicking this will call the number -->
+    <div class="hero-phone">
+      <a href="tel:+916283266268">📞 +91 62832 66268</a>
+    </div>
+
+  </section>
+
+
+  <!-- Thin decorative divider line between sections -->
+  <div class="divider"></div>
+
+
+  <!-- ============================================================
+       CONTACT / ABOUT SECTION
+       Description and quick contact buttons
+       ============================================================ -->
+  <section id="contact">
+
+    <!-- Small label above the section -->
+    <p class="section-label">About Us</p>
+
+    <!-- Main description paragraph -->
+    <!-- To change this text, just edit the words inside the <p> tag -->
+    <p class="section-text">
+      We have been guiding yoga, meditation, and chess sessions regularly since 2011
+      and continuously receive top ratings on Google. Whether you're a beginner or
+      looking to deepen your practice, we welcome you.
+    </p>
+
+    <!-- Green highlighted box with contact options -->
+    <div class="contact-highlight">
+
+      <!-- Instruction text above the buttons -->
+      <p>For joining our sessions or any enquiry, WhatsApp or Call us at:</p>
+
+      <!-- Two buttons side by side -->
+      <div class="action-buttons">
+
+        <!-- WhatsApp button — opens WhatsApp chat in a new tab -->
+        <a href="https://wa.me/916283266268" target="_blank" rel="noopener" class="btn btn-whatsapp">
+          💬 WhatsApp
+        </a>
+
+        <!-- Call button — dials the number directly -->
+        <a href="tel:+916283266268" class="btn btn-call">
+          📞 +91 62832 66268
+        </a>
+
+      </div>
+    </div>
+
+  </section>
+
+
+  <!-- Thin decorative divider line -->
+  <div class="divider"></div>
+
+
+  <!-- ============================================================
+       SOCIAL MEDIA / FOLLOW US SECTION
+       Website link and social media icons
+       ============================================================ -->
+  <section class="social-section">
+
+    <!-- Small label -->
+    <p class="section-label">Find Us Online</p>
+
+    <!-- Main website link — opens in new tab -->
+    <!-- To change the website URL, edit the href below -->
+    <a href="https://yogaanurag.blogspot.com" target="_blank" rel="noopener" class="website-link">
+      yogaanurag.blogspot.com
+    </a>
+
+    <!-- Instruction text -->
+    <p class="follow-text">Follow us on:</p>
+
+    <!-- Row of social media links -->
+    <div class="social-links">
+
+      <!-- Instagram — opens in new tab -->
+      <a href="https://www.instagram.com/anuragpage" target="_blank" rel="noopener">Instagram</a>
+
+      <!-- YouTube — opens in new tab -->
+      <a href="https://www.youtube.com/@yogaanurag" target="_blank" rel="noopener">YouTube</a>
+
+      <!-- X (formerly Twitter) — opens in new tab -->
+      <a href="https://x.com/yogaanurag" target="_blank" rel="noopener">X</a>
+
+      <!-- Website — opens in new tab -->
+      <a href="https://ragasea.github.io/chess/" target="_blank" rel="noopener">Website</a>
+
+    </div>
+
+  </section>
+
+
+  <!-- Thin decorative divider line -->
+  <div class="divider"></div>
+
+
+  <!-- ============================================================
+       YOGA & CHESS CARDS SECTION
+       Two cards that link to the respective pages
+       ============================================================ -->
+  <section class="sessions-section">
+
+    <!-- Small label -->
+    <p class="section-label" style="text-align:center; margin-bottom: 24px;">Our Sessions</p>
+
+    <!-- Grid of two cards -->
+    <div class="sessions-grid">
+
+      <!-- YOGA CARD — clicking opens the yoga page in a new tab -->
+      <a href="https://anuragpage.github.io/go/chess" target="_blank" rel="noopener" class="session-card" id="yoga">
+        <span class="card-icon">🧘</span>
+        <div class="card-title">Yoga &amp; Meditation</div>
+        <p class="card-desc">Join our guided sessions for body, breath, and calm mind.</p>
+      </a>
+
+      <!-- CHESS CARD — clicking opens the chess page in a new tab -->
+      <a href="https://anuragpage.github.io/go/chess" target="_blank" rel="noopener" class="session-card" id="chess">
+        <span class="card-icon">♟️</span>
+        <div class="card-title">Chess</div>
+        <p class="card-desc">Learn strategy, openings, and sharpen your thinking.</p>
+      </a>
+
+    </div>
+
+  </section>
+
+
+  <!-- ============================================================
+       FOOTER
+       Bottom of the page with links and copyright
+       ============================================================ -->
+  <footer>
+
+    <!-- Footer navigation links -->
+    <ul class="footer-links">
+
+      <!-- "Home" scrolls back to the top -->
+      <li><a href="#home">Home</a></li>
+
+      <!-- "Contact" scrolls to the contact section -->
+      <li><a href="#contact">Contact</a></li>
+
+      <!-- "Yoga" opens yoga page in new tab -->
+      <li><a href="https://anuragpage.github.io/go/chess" target="_blank" rel="noopener">Yoga</a></li>
+
+      <!-- "Chess" opens chess page in new tab -->
+      <li><a href="https://anuragpage.github.io/go/chess" target="_blank" rel="noopener">Chess</a></li>
+
+    </ul>
+
+    <!-- Copyright line — update the year if needed -->
+    <p class="footer-copy">© 2025 Anurag · Yoga · Meditation · Chess</p>
+
+  </footer>
+
+
+</body>
+</html>
