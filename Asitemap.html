@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>Site Map | Anurag</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body id="top" data-title="Site Map">
+
+<div id="site-header"></div>
+
+<main class="page">
+
+<section>
+
+<h2>Website Pages</h2>
+
+<p>
+This page is generated automatically from the GitHub repository.
+Any new HTML page you upload will appear here automatically.
+</p>
+
+<div id="page-list">
+
+<p>Loading pages...</p>
+
+</div>
+
+</section>
+
+</main>
+
+<div id="site-footer"></div>
+
+<script src="layout.js"></script>
+
+<script>
+
+/* ======================================
+   CHANGE THESE
+====================================== */
+
+const OWNER = "anuragpage";
+
+const REPO = "k23";
+
+/* ====================================== */
+
+const API =
+`https://api.github.com/repos/${OWNER}/${REPO}/contents/`;
+
+fetch(API)
+
+.then(response => response.json())
+
+.then(files => {
+
+    const htmlFiles = files
+
+        .filter(file =>
+            file.name.endsWith(".html"))
+
+        .sort((a,b)=>{
+
+            if(a.name==="index.html") return -1;
+
+            if(b.name==="index.html") return 1;
+
+            return a.name.localeCompare(b.name);
+
+        });
+
+    let html = "<ul>";
+
+    htmlFiles.forEach(file=>{
+
+        let title = file.name
+            .replace(".html","")
+            .replace(/-/g," ");
+
+        if(file.name==="index.html")
+            title="Anurag Home";
+
+        title = title.replace(/\b\w/g,
+            c=>c.toUpperCase());
+
+        html += `
+
+<li>
+
+<a href="${file.name}">
+
+${title}
+
+</a>
+
+</li>
+
+`;
+
+    });
+
+    html += "</ul>";
+
+    document.getElementById("page-list")
+        .innerHTML = html;
+
+})
+
+.catch(()=>{
+
+    document.getElementById("page-list")
+    .innerHTML =
+    "<p>Unable to load site map.</p>";
+
+});
+
+</script>
+
+</body>
+
+</html>
