@@ -1,0 +1,844 @@
+/*
+=========================================================
+Website : Anurag
+Theme   : Elegant • Minimal • Timeless
+Date    : 08 August 2026 (IST)
+=========================================================
+*/
+
+/*=========================================================
+GOOGLE FONTS
+=========================================================*/
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Source+Serif+4:wght@400;500;600&display=swap');
+
+
+
+
+
+/*=========================================================
+THEME
+Change only these values to redesign the whole website.
+=========================================================*/
+
+:root{
+
+    /* Colors */
+
+    --bg:#faf9f5;
+
+    --surface:#f3f4ef;
+
+    --text:#4b4e4a;
+
+    --heading:#2d4b3d;
+
+    --primary:#6f8f7c;
+
+    --primary-dark:#4d6f5b;
+
+    --border:#e2e4dd;
+
+    --muted:#777;
+
+    /* Fonts */
+
+    --font-body:"Source Serif 4", serif;
+
+    --font-heading:"Cormorant Garamond", serif;
+
+    /* Layout */
+
+    --page-width:720px;
+
+    --radius:6px;
+
+    --transition:.25s;
+
+}
+
+
+
+
+
+
+/*=========================================================
+RESET
+=========================================================*/
+
+*{
+
+    margin:0;
+
+    padding:0;
+
+    box-sizing:border-box;
+
+}
+
+html{
+
+    scroll-behavior:smooth;
+
+}
+
+body{
+
+    background:var(--bg);
+
+    color:var(--text);
+
+    font-family:var(--font-body);
+
+    line-height:1.8;
+
+    font-size:18px;
+
+}
+
+
+
+
+
+
+/*=========================================================
+PAGE
+=========================================================*/
+
+.page{
+
+    max-width:var(--page-width);
+
+    margin:auto;
+
+    padding:26px;
+
+}
+
+
+
+
+
+
+/*=========================================================
+HEADER
+=========================================================*/
+
+header{
+
+    text-align:center;
+
+    padding-bottom:26px;
+
+}
+
+h1{
+
+    color:var(--heading);
+
+    font-family:var(--font-heading);
+
+    font-size:3.2rem;
+
+    font-weight:500;
+
+    letter-spacing:1px;
+
+}
+
+.subtitle{
+
+    margin-top:4px;
+
+    color:var(--muted);
+
+    font-style:italic;
+
+}
+
+
+
+
+
+
+/*=========================================================
+NAVIGATION
+=========================================================*/
+
+.nav{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    flex-wrap:wrap;
+
+    gap:10px;
+
+    margin-top:16px;
+
+    font-size:.95rem;
+
+}
+
+.nav a{
+
+    color:var(--primary);
+
+    text-decoration:none;
+
+    transition:var(--transition);
+
+}
+
+.nav a:hover{
+
+    color:var(--primary-dark);
+
+}
+
+.nav a.active{
+
+    color:var(--heading);
+
+    font-weight:600;
+
+}
+
+.nav span{
+
+    color:#bdbdbd;
+
+}
+
+
+
+
+
+
+/*=========================================================
+SECTIONS
+=========================================================*/
+
+section{
+
+    padding:30px 0;
+
+    border-top:1px solid var(--border);
+
+}
+
+section:first-of-type{
+
+    border-top:none;
+
+}
+
+
+
+
+
+
+/*=========================================================
+HEADINGS
+=========================================================*/
+
+h2{
+
+    color:var(--heading);
+
+    font-family:var(--font-heading);
+
+    font-size:2rem;
+
+    font-weight:500;
+
+    margin-bottom:14px;
+
+}
+
+h3{
+
+    color:var(--heading);
+
+    font-family:var(--font-heading);
+
+    font-size:1.4rem;
+
+    margin-bottom:10px;
+
+}
+
+p{
+
+    margin-bottom:14px;
+
+}
+
+
+
+
+
+
+/*=========================================================
+LINKS
+=========================================================*/
+
+a{
+
+    color:var(--primary);
+
+    transition:var(--transition);
+
+}
+
+a:hover{
+
+    color:var(--primary-dark);
+
+}
+
+.simple-link{
+
+    text-decoration:none;
+
+    border-bottom:1px solid #b8c7bd;
+
+    padding-bottom:2px;
+
+}
+
+.simple-link:hover{
+
+    border-color:var(--primary-dark);
+
+}
+
+
+
+
+
+
+/*=========================================================
+LISTS
+=========================================================*/
+
+ul{
+
+    padding-left:24px;
+
+}
+
+li{
+
+    margin-bottom:8px;
+
+}
+
+/*=========================================================
+CARDS
+=========================================================*/
+
+.card{
+
+    background:var(--surface);
+
+    padding:22px;
+
+    border-radius:var(--radius);
+
+    border:1px solid var(--border);
+
+}
+
+.card p:last-child{
+
+    margin-bottom:0;
+
+}
+
+
+
+
+
+/*=========================================================
+BIO
+=========================================================*/
+
+.bio{
+
+    text-align:justify;
+
+    line-height:1.9;
+
+}
+
+.bio::first-letter{
+
+    float:left;
+
+    font-family:var(--font-heading);
+
+    font-size:4.2rem;
+
+    line-height:.72;
+
+    color:var(--heading);
+
+    margin:8px 10px 0 0;
+
+}
+
+
+
+
+
+/*=========================================================
+LINK GROUPS
+=========================================================*/
+
+.links{
+
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:12px 28px;
+
+}
+
+.links a{
+
+    text-decoration:none;
+
+}
+
+
+
+
+
+/*=========================================================
+BUTTONS
+=========================================================*/
+
+.button{
+
+    display:inline-block;
+
+    padding:10px 18px;
+
+    background:var(--primary);
+
+    color:white;
+
+    text-decoration:none;
+
+    border-radius:4px;
+
+    transition:var(--transition);
+
+}
+
+.button:hover{
+
+    background:var(--primary-dark);
+
+    color:white;
+
+}
+
+
+
+
+
+/*=========================================================
+IMAGES
+=========================================================*/
+
+img{
+
+    display:block;
+
+    width:100%;
+
+    height:auto;
+
+    border-radius:var(--radius);
+
+}
+
+figure{
+
+    margin:20px 0;
+
+}
+
+figcaption{
+
+    margin-top:8px;
+
+    text-align:center;
+
+    color:var(--muted);
+
+    font-size:.9rem;
+
+}
+
+
+
+
+
+/*=========================================================
+BLOCKQUOTE
+=========================================================*/
+
+blockquote{
+
+    margin:20px 0;
+
+    padding-left:18px;
+
+    border-left:3px solid var(--primary);
+
+    color:#666;
+
+    font-style:italic;
+
+}
+
+
+
+
+
+/*=========================================================
+TABLE
+=========================================================*/
+
+table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    margin:20px 0;
+
+}
+
+th{
+
+    text-align:left;
+
+    color:var(--heading);
+
+    border-bottom:2px solid var(--border);
+
+    padding:10px;
+
+}
+
+td{
+
+    border-bottom:1px solid var(--border);
+
+    padding:10px;
+
+}
+
+
+
+
+
+/*=========================================================
+HR
+=========================================================*/
+
+hr{
+
+    border:none;
+
+    border-top:1px solid var(--border);
+
+    margin:32px 0;
+
+}
+
+
+
+
+
+/*=========================================================
+CODE
+=========================================================*/
+
+code{
+
+    background:#efefea;
+
+    padding:2px 6px;
+
+    border-radius:3px;
+
+    font-size:.92rem;
+
+}
+
+
+
+
+
+/*=========================================================
+FOOTER
+=========================================================*/
+
+footer{
+
+    margin-top:34px;
+
+    padding:26px 0 14px;
+
+    border-top:1px solid var(--border);
+
+}
+
+.footer-links{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    flex-wrap:wrap;
+
+    gap:10px;
+
+    font-size:.92rem;
+
+}
+
+.footer-links a{
+
+    text-decoration:none;
+
+}
+
+.footer-links span{
+
+    color:#c5c5c5;
+
+}
+
+.footer-copy{
+
+    text-align:center;
+
+    color:#888;
+
+    font-size:.82rem;
+
+    margin-top:18px;
+
+}
+
+
+
+
+
+/*=========================================================
+UTILITY CLASSES
+=========================================================*/
+
+.center{
+
+    text-align:center;
+
+}
+
+.right{
+
+    text-align:right;
+
+}
+
+.left{
+
+    text-align:left;
+
+}
+
+.small{
+
+    font-size:.9rem;
+
+}
+
+.large{
+
+    font-size:1.2rem;
+
+}
+
+.muted{
+
+    color:var(--muted);
+
+}
+
+.mt{
+
+    margin-top:20px;
+
+}
+
+.mb{
+
+    margin-bottom:20px;
+
+}
+
+
+
+
+
+/*=========================================================
+SMOOTH APPEAR
+=========================================================*/
+
+header,
+section,
+footer{
+
+    animation:fadeIn .45s ease;
+
+}
+
+@keyframes fadeIn{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(8px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
+
+}
+
+
+
+
+
+/*=========================================================
+MOBILE
+=========================================================*/
+
+@media(max-width:700px){
+
+.page{
+
+    padding:18px;
+
+}
+
+body{
+
+    font-size:17px;
+
+}
+
+h1{
+
+    font-size:2.6rem;
+
+}
+
+h2{
+
+    font-size:1.7rem;
+
+}
+
+.nav{
+
+    gap:8px;
+
+    font-size:.9rem;
+
+}
+
+.bio{
+
+    text-align:left;
+
+}
+
+.bio::first-letter{
+
+    font-size:3.6rem;
+
+}
+
+.links{
+
+    gap:10px 18px;
+
+}
+
+.card{
+
+    padding:18px;
+
+}
+
+.footer-links{
+
+    gap:8px;
+
+}
+
+}
+
+
+
+
+
+/*=========================================================
+PRINT
+=========================================================*/
+
+@media print{
+
+.nav,
+footer{
+
+    display:none;
+
+}
+
+body{
+
+    background:white;
+
+    color:black;
+
+}
+
+.page{
+
+    max-width:100%;
+
+}
+
+}
+
