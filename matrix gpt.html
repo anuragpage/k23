@@ -1,0 +1,653 @@
+<!--
+Prompt: Write code to create effect of Matrix movie in which specific yoga related
+words are falling and in between main heading of Yoga Anurag is written.
+Indian Date & Time: 1 September 2026, 1:13 PM IST
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yoga Anurag - Matrix Effect</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    html, body {
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: #000;
+        font-family: "Courier New", monospace;
+    }
+
+    canvas {
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        display: block;
+        background: #000;
+    }
+
+    /* Central title */
+    .title {
+        position: fixed;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+
+        color: #d8ffd8;
+        font-family: Georgia, serif;
+        font-size: clamp(42px, 8vw, 120px);
+        font-weight: bold;
+        letter-spacing: clamp(5px, 1.5vw, 20px);
+
+        white-space: nowrap;
+        text-align: center;
+
+        text-shadow:
+            0 0 5px #fff,
+            0 0 12px #39ff14,
+            0 0 30px #00ff44,
+            0 0 60px #00ff44;
+
+        z-index: 5;
+
+        animation:
+            titlePulse 3s ease-in-out infinite,
+            titleFlicker 7s linear infinite;
+    }
+
+    /* Digital scan line across title */
+    .title::after {
+        content: "";
+        position: absolute;
+        left: -5%;
+        right: -5%;
+        height: 2px;
+        top: 50%;
+
+        background: rgba(100,255,100,0.7);
+        box-shadow: 0 0 12px #00ff44;
+
+        animation: scan 2.8s linear infinite;
+    }
+
+    .subtitle {
+        position: fixed;
+        left: 50%;
+        top: calc(50% + clamp(50px, 7vw, 90px));
+        transform: translateX(-50%);
+
+        color: rgba(100,255,100,0.8);
+        font-family: "Courier New", monospace;
+        font-size: clamp(10px, 1.3vw, 18px);
+        letter-spacing: 5px;
+
+        z-index: 5;
+        white-space: nowrap;
+
+        text-shadow: 0 0 10px #00ff44;
+    }
+
+    @keyframes titlePulse {
+        0%, 100% {
+            opacity: 0.90;
+            filter: brightness(0.95);
+        }
+
+        50% {
+            opacity: 1;
+            filter: brightness(1.25);
+        }
+    }
+
+    @keyframes titleFlicker {
+        0%, 94%, 96%, 100% {
+            opacity: 1;
+        }
+
+        95% {
+            opacity: 0.65;
+        }
+
+        97% {
+            opacity: 0.85;
+        }
+    }
+
+    @keyframes scan {
+        0% {
+            transform: translateY(-60px);
+            opacity: 0;
+        }
+
+        20% {
+            opacity: 1;
+        }
+
+        80% {
+            opacity: 1;
+        }
+
+        100% {
+            transform: translateY(60px);
+            opacity: 0;
+        }
+    }
+
+    /* Small controls */
+    .controls {
+        position: fixed;
+        left: 20px;
+        bottom: 20px;
+        z-index: 10;
+
+        display: flex;
+        gap: 8px;
+    }
+
+    button {
+        padding: 9px 14px;
+        border: 1px solid rgba(50,255,100,0.5);
+        border-radius: 5px;
+
+        background: rgba(0,20,5,0.7);
+        color: #8aff9a;
+
+        font-family: "Courier New", monospace;
+        cursor: pointer;
+
+        transition: 0.2s;
+    }
+
+    button:hover {
+        background: rgba(0,255,60,0.15);
+        box-shadow: 0 0 15px rgba(0,255,60,0.4);
+    }
+
+    @media (max-width: 600px) {
+        .title {
+            letter-spacing: 4px;
+        }
+
+        .subtitle {
+            letter-spacing: 2px;
+        }
+    }
+</style>
+</head>
+
+<body>
+
+<canvas id="matrix"></canvas>
+
+<div class="title">YOGA ANURAG</div>
+<div class="subtitle">YOGA • MEDITATION • AWARENESS</div>
+
+<div class="controls">
+    <button id="pauseBtn">PAUSE</button>
+    <button id="resetBtn">RESET</button>
+</div>
+
+<script>
+"use strict";
+
+/* ==========================================================
+   YOGA MATRIX RAIN
+   ========================================================== */
+
+const canvas = document.getElementById("matrix");
+const ctx = canvas.getContext("2d");
+
+const pauseBtn = document.getElementById("pauseBtn");
+const resetBtn = document.getElementById("resetBtn");
+
+/*
+   Yoga vocabulary appearing in the digital rain.
+   You can freely add or remove words.
+*/
+const yogaWords = [
+    "ASANA",
+    "PRANAYAMA",
+    "MEDITATION",
+    "DHARANA",
+    "DHYANA",
+    "SAMADHI",
+    "PRANA",
+    "SHANTI",
+    "AWARENESS",
+    "MINDFULNESS",
+    "BALANCE",
+    "HARMONY",
+    "INNER PEACE",
+    "YOGA",
+    "OM",
+    "CHAKRA",
+    "KARMA",
+    "AHIMSA",
+    "SATYA",
+    "SANTOSHA",
+    "SVADHYAYA",
+    "TAPAS",
+    "ISHVARA",
+    "BREATH",
+    "FOCUS",
+    "CALM",
+    "STILLNESS",
+    "CONSCIOUSNESS",
+    "SELF AWARENESS",
+    "RELAXATION"
+];
+
+/*
+   Matrix-style random characters.
+   These make the falling words feel integrated
+   into the digital rain.
+*/
+const matrixChars =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ॐ∞∴∵";
+
+let width;
+let height;
+let fontSize;
+let columns = [];
+let animationId;
+
+let paused = false;
+let lastTime = 0;
+
+/* ----------------------------------------------------------
+   Resize
+---------------------------------------------------------- */
+
+function resizeCanvas() {
+
+    const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+
+    width = window.innerWidth;
+    height = window.innerHeight;
+
+    canvas.width = width * pixelRatio;
+    canvas.height = height * pixelRatio;
+
+    canvas.style.width = width + "px";
+    canvas.style.height = height + "px";
+
+    ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+
+    fontSize = Math.max(15, Math.min(24, width / 65));
+
+    createColumns();
+}
+
+/* ----------------------------------------------------------
+   Create falling columns
+---------------------------------------------------------- */
+
+function createColumns() {
+
+    const numberOfColumns =
+        Math.ceil(width / fontSize);
+
+    columns = [];
+
+    for (let i = 0; i < numberOfColumns; i++) {
+
+        columns.push({
+            x: i * fontSize,
+
+            y: Math.random() * height,
+
+            speed:
+                45 +
+                Math.random() * 120,
+
+            length:
+                8 +
+                Math.floor(Math.random() * 22),
+
+            wordTimer:
+                Math.random() * 3,
+
+            word:
+                Math.random() < 0.65
+                    ? randomWord()
+                    : null,
+
+            wordIndex: 0,
+
+            wordSize:
+                fontSize * (
+                    0.8 +
+                    Math.random() * 0.45
+                )
+        });
+    }
+}
+
+/* ----------------------------------------------------------
+   Random yoga word
+---------------------------------------------------------- */
+
+function randomWord() {
+    return yogaWords[
+        Math.floor(
+            Math.random() * yogaWords.length
+        )
+    ];
+}
+
+/* ----------------------------------------------------------
+   Random Matrix character
+---------------------------------------------------------- */
+
+function randomChar() {
+
+    return matrixChars[
+        Math.floor(
+            Math.random() * matrixChars.length
+        )
+    ];
+}
+
+/* ----------------------------------------------------------
+   Draw digital rain
+---------------------------------------------------------- */
+
+function drawRain(delta) {
+
+    /*
+       Semi-transparent black layer creates the
+       characteristic Matrix trailing effect.
+    */
+
+    ctx.fillStyle = "rgba(0, 0, 0, 0.075)";
+    ctx.fillRect(0, 0, width, height);
+
+    ctx.textBaseline = "top";
+
+    columns.forEach(column => {
+
+        column.y += column.speed * delta;
+
+        /*
+           Occasionally change the falling word.
+        */
+
+        column.wordTimer -= delta;
+
+        if (column.wordTimer <= 0) {
+
+            column.wordTimer =
+                2 + Math.random() * 5;
+
+            column.word =
+                Math.random() < 0.72
+                    ? randomWord()
+                    : null;
+
+            column.wordIndex = 0;
+        }
+
+        /*
+           Draw Matrix characters trailing
+           behind the main yoga word.
+        */
+
+        ctx.font =
+            `${fontSize}px "Courier New"`;
+
+        for (
+            let i = 0;
+            i < column.length;
+            i++
+        ) {
+
+            const y =
+                column.y -
+                i * fontSize;
+
+            if (y < -fontSize || y > height)
+                continue;
+
+            /*
+               Brightness fades toward the tail.
+            */
+
+            const brightness =
+                1 - i / column.length;
+
+            if (i === 0) {
+
+                ctx.fillStyle =
+                    "rgba(220,255,220,0.95)";
+
+            } else {
+
+                ctx.fillStyle =
+                    `rgba(20,255,70,${0.08 + brightness * 0.55})`;
+            }
+
+            ctx.shadowBlur =
+                i === 0 ? 12 : 4;
+
+            ctx.shadowColor =
+                "#00ff44";
+
+            ctx.fillText(
+                randomChar(),
+                column.x,
+                y
+            );
+        }
+
+        /*
+           Occasionally replace part of the
+           Matrix stream with an actual yoga word.
+        */
+
+        if (column.word) {
+
+            const wordY =
+                column.y -
+                (column.length + 2) * fontSize;
+
+            if (
+                wordY > -fontSize * 2 &&
+                wordY < height + fontSize
+            ) {
+
+                ctx.font =
+                    `bold ${column.wordSize}px "Courier New"`;
+
+                ctx.fillStyle =
+                    "rgba(120,255,140,0.9)";
+
+                ctx.shadowBlur = 16;
+                ctx.shadowColor = "#00ff44";
+
+                ctx.fillText(
+                    column.word,
+                    column.x,
+                    wordY
+                );
+            }
+        }
+
+        /*
+           Reset column after it leaves the screen.
+        */
+
+        if (column.y > height + column.length * fontSize) {
+
+            column.y =
+                -Math.random() * height * 0.5;
+
+            column.speed =
+                45 + Math.random() * 120;
+
+            column.length =
+                8 + Math.floor(Math.random() * 22);
+
+            column.word =
+                randomWord();
+
+            column.wordTimer =
+                2 + Math.random() * 5;
+        }
+    });
+
+    ctx.shadowBlur = 0;
+}
+
+/* ----------------------------------------------------------
+   Subtle central darkness
+---------------------------------------------------------- */
+
+function drawCenterFocus() {
+
+    /*
+       Creates a slightly darker area behind
+       YOGA ANURAG so the title remains readable.
+    */
+
+    const gradient =
+        ctx.createRadialGradient(
+            width / 2,
+            height / 2,
+            40,
+            width / 2,
+            height / 2,
+            Math.min(width, height) * 0.48
+        );
+
+    gradient.addColorStop(
+        0,
+        "rgba(0,0,0,0.55)"
+    );
+
+    gradient.addColorStop(
+        0.45,
+        "rgba(0,0,0,0.25)"
+    );
+
+    gradient.addColorStop(
+        1,
+        "rgba(0,0,0,0)"
+    );
+
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, width, height);
+}
+
+/* ----------------------------------------------------------
+   Animation loop
+---------------------------------------------------------- */
+
+function animate(timestamp) {
+
+    animationId =
+        requestAnimationFrame(animate);
+
+    if (paused) {
+        lastTime = timestamp;
+        return;
+    }
+
+    /*
+       Prevent huge jumps if the browser
+       temporarily pauses the tab.
+    */
+
+    let delta =
+        (timestamp - lastTime) / 1000;
+
+    delta =
+        Math.min(delta || 0, 0.05);
+
+    lastTime = timestamp;
+
+    drawRain(delta);
+    drawCenterFocus();
+}
+
+/* ----------------------------------------------------------
+   Buttons
+---------------------------------------------------------- */
+
+pauseBtn.addEventListener(
+    "click",
+    () => {
+
+        paused = !paused;
+
+        pauseBtn.textContent =
+            paused ? "PLAY" : "PAUSE";
+    }
+);
+
+resetBtn.addEventListener(
+    "click",
+    () => {
+
+        createColumns();
+
+        ctx.fillStyle = "#000";
+        ctx.fillRect(
+            0,
+            0,
+            width,
+            height
+        );
+    }
+);
+
+/* ----------------------------------------------------------
+   Window resize
+---------------------------------------------------------- */
+
+window.addEventListener(
+    "resize",
+    resizeCanvas
+);
+
+/* ----------------------------------------------------------
+   Reduced motion accessibility
+---------------------------------------------------------- */
+
+const reduceMotion =
+    window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+if (reduceMotion) {
+    paused = true;
+    pauseBtn.textContent = "PLAY";
+}
+
+/* ----------------------------------------------------------
+   Start
+---------------------------------------------------------- */
+
+resizeCanvas();
+
+ctx.fillStyle = "#000";
+ctx.fillRect(
+    0,
+    0,
+    width,
+    height
+);
+
+requestAnimationFrame(animate);
+
+</script>
+
+</body>
+</html>
