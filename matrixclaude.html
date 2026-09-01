@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Yoga Anurag</title>
+<style>
+  :root{
+    --bg: #060a08;
+    --leaf: #5fdc8f;
+    --leaf-dim: #1f5c3a;
+    --gold: #e7c580;
+    --ink: #eaf6ee;
+  }
+  *{ box-sizing: border-box; }
+  html, body{
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--bg);
+    overflow: hidden;
+  }
+  canvas{
+    display: block;
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .heading{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 10;
+    pointer-events: none;
+    width: 90%;
+  }
+  .heading .top{
+    font-family: 'Georgia', 'Times New Roman', serif;
+    font-weight: 400;
+    letter-spacing: 0.18em;
+    font-size: clamp(1rem, 4vw, 2rem);
+    color: var(--leaf);
+    opacity: 0.85;
+    margin: 0 0 0.4rem 0;
+    animation: flicker 4.5s ease-in-out infinite;
+    text-shadow: 0 0 14px rgba(95,220,143,0.55);
+  }
+  .heading .main{
+    font-family: 'Georgia', 'Times New Roman', serif;
+    font-weight: 400;
+    font-size: clamp(2.6rem, 9vw, 5.5rem);
+    color: var(--ink);
+    margin: 0;
+    letter-spacing: 0.03em;
+    text-shadow:
+      0 0 18px rgba(95,220,143,0.9),
+      0 0 44px rgba(95,220,143,0.5),
+      0 0 90px rgba(231,197,128,0.25);
+    animation: breathe 6s ease-in-out infinite;
+  }
+  .heading .rule{
+    width: 64px;
+    height: 1px;
+    margin: 1rem auto 0.9rem auto;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    opacity: 0.7;
+  }
+  .heading .sub{
+    font-family: 'Georgia', 'Times New Roman', serif;
+    font-style: italic;
+    font-size: clamp(0.8rem, 2.2vw, 1.05rem);
+    color: var(--leaf);
+    opacity: 0.65;
+    letter-spacing: 0.06em;
+  }
+  @keyframes breathe{
+    0%, 100% { text-shadow: 0 0 18px rgba(95,220,143,0.9), 0 0 44px rgba(95,220,143,0.5), 0 0 90px rgba(231,197,128,0.25); }
+    50% { text-shadow: 0 0 26px rgba(95,220,143,1), 0 0 60px rgba(95,220,143,0.65), 0 0 120px rgba(231,197,128,0.35); }
+  }
+  @keyframes flicker{
+    0%, 100% { opacity: 0.85; }
+    48% { opacity: 0.85; }
+    50% { opacity: 0.4; }
+    52% { opacity: 0.85; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="matrix"></canvas>
+
+<div class="heading">
+  <p class="top">CHESS ANURAG ACADEMY PRESENTS</p>
+  <h1 class="main">Yoga Anurag</h1>
+  <div class="rule"></div>
+  <p class="sub">breathe &nbsp;·&nbsp; align &nbsp;·&nbsp; awaken</p>
+</div>
+
+<script>
+const canvas = document.getElementById('matrix');
+const ctx = canvas.getContext('2d');
+
+let width, height, fontSize, columns, drops;
+
+// Yoga-related words used as the falling "code"
+const words = [
+  "om","prana","asana","yoga","breath","chakra","namaste","shanti",
+  "dhyana","mantra","surya","mudra","karma","bhakti","seva","guru",
+  "vinyasa","pranayama","sattva","ananda","moksha","sadhana","kriya",
+  "nidra","hatha","kundalini","drishti","samadhi","ujjayi","tapas",
+  "santosha","ahimsa","svadhyaya","brahma","atman","yamas","niyama",
+  "lotus","stillness","align","balance","ground","release","inhale",
+  "exhale","peace","flow","presence","calm"
+];
+
+function pickGlyph(){
+  // Occasionally drop a single word, otherwise a short devanagari-ish/latin glyph fragment
+  if (Math.random() < 0.22) {
+    return words[Math.floor(Math.random() * words.length)];
+  }
+  const chars = "abcdefghijklmnopqrstuvwxyz";
+  return chars[Math.floor(Math.random() * chars.length)];
+}
+
+function resize(){
+  width = canvas.width = window.innerWidth;
+  height = canvas.height = window.innerHeight;
+  fontSize = Math.max(14, Math.min(22, width / 55));
+  columns = Math.floor(width / fontSize);
+  drops = new Array(columns).fill(0).map(() => Math.random() * -100);
+  glyphs = new Array(columns).fill(0).map(() => pickGlyph());
+}
+
+let glyphs = [];
+window.addEventListener('resize', resize);
+resize();
+
+function draw(){
+  // translucent black to create the fading trail
+  ctx.fillStyle = 'rgba(6, 10, 8, 0.08)';
+  ctx.fillRect(0, 0, width, height);
+
+  ctx.font = fontSize + 'px Georgia, serif';
+  ctx.textAlign = 'left';
+
+  for (let i = 0; i < columns; i++){
+    const text = glyphs[i];
+    const x = i * fontSize;
+    const y = drops[i] * fontSize;
+
+    // leading glyph brighter (the "head" of the stream)
+    const grad = ctx.createLinearGradient(0, y - fontSize, 0, y + fontSize);
+    ctx.fillStyle = '#eafff2';
+    ctx.fillText(text, x, y);
+
+    ctx.fillStyle = 'rgba(95, 220, 143, 0.75)';
+    ctx.fillText(text, x, y - fontSize);
+
+    if (y > height && Math.random() > 0.975){
+      drops[i] = 0;
+      glyphs[i] = pickGlyph();
+    }
+    drops[i] += 0.35 + Math.random() * 0.4;
+
+    if (Math.random() > 0.985){
+      glyphs[i] = pickGlyph();
+    }
+  }
+
+  requestAnimationFrame(draw);
+}
+
+draw();
+</script>
+
+</body>
+</html>
