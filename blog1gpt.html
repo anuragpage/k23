@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<!--
+Prompt: Create minimal beautiful static HTML page for the given spiritual knowledge content,
+with an end/bottom bar linking to yogaanurag.blogspot.com, WhatsApp, and the top of the page.
+Indian Date & Time: 6 September 2026, 10:25 AM IST
+-->
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <!-- Mobile friendly -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>The Goal of All Answers — Silence</title>
+
+    <!-- Preview when shared on WhatsApp, Facebook, etc. -->
+    <meta property="og:title" content="The Goal of All Answers — Silence">
+    <meta property="og:description"
+          content="Some questions can be answered only in Silence. Silence is the goal of all answers.">
+    <meta property="og:image"
+          content="https://anuragpage.github.io/k/pic1.png">
+    <meta property="og:type" content="website">
+
+    <!-- Twitter / X preview -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="The Goal of All Answers — Silence">
+    <meta name="twitter:description"
+          content="Some questions can be answered only in Silence. Silence is the goal of all answers.">
+    <meta name="twitter:image"
+          content="https://anuragpage.github.io/k/pic1.png">
+
+    <style>
+
+        /* ================================
+           BASIC SETTINGS
+           ================================ */
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            padding: 0 0 75px 0;
+
+            background: #f7f5ef;
+            color: #333;
+
+            font-family: Georgia, "Times New Roman", serif;
+            line-height: 1.8;
+        }
+
+
+        /* ================================
+           MAIN PAGE
+           ================================ */
+
+        .page {
+            width: 100%;
+            max-width: 780px;
+            margin: auto;
+            padding: 45px 22px;
+        }
+
+
+        /* ================================
+           HEADER
+           ================================ */
+
+        .header {
+            text-align: center;
+            margin-bottom: 45px;
+        }
+
+        .header h1 {
+            margin: 0;
+            color: #5b4a35;
+            font-size: 2.2rem;
+            font-weight: normal;
+            line-height: 1.3;
+        }
+
+        .subtitle {
+            margin-top: 12px;
+            color: #8a7963;
+            font-size: 1rem;
+            font-style: italic;
+        }
+
+
+        /* ================================
+           CONTENT
+           ================================ */
+
+        .content p {
+            margin: 0 0 24px 0;
+            font-size: 1.08rem;
+        }
+
+        .question {
+            text-align: center;
+            font-size: 1.35rem !important;
+            color: #6a5438;
+            margin: 35px 0 !important;
+        }
+
+
+        /* ================================
+           QUOTES
+           ================================ */
+
+        .section-title {
+            margin-top: 50px;
+            margin-bottom: 22px;
+
+            color: #5b4a35;
+            font-size: 1.4rem;
+            font-weight: normal;
+
+            border-bottom: 1px solid #d9d1c3;
+            padding-bottom: 8px;
+        }
+
+        .quote {
+            margin: 0 0 25px 0;
+            padding: 18px 20px;
+
+            background: #efebe2;
+            border-left: 3px solid #b49a72;
+
+            color: #4b4339;
+            font-size: 1rem;
+            font-style: italic;
+        }
+
+
+        /* ================================
+           HINDI SECTION
+           ================================ */
+
+        .hindi {
+            margin-top: 45px;
+
+            font-family:
+                "Noto Sans Devanagari",
+                "Mangal",
+                Arial,
+                sans-serif;
+
+            font-size: 1.08rem;
+        }
+
+        .jai-guru {
+            text-align: center;
+            margin-top: 35px;
+
+            color: #806442;
+            font-size: 1.2rem;
+        }
+
+
+        /* ================================
+           FOOTER INFORMATION
+           ================================ */
+
+        .details {
+            margin-top: 35px;
+            text-align: center;
+
+            color: #81786d;
+            font-family: Arial, sans-serif;
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+
+
+        /* ================================
+           FIXED BOTTOM BAR
+           ================================ */
+
+        .bottom-bar {
+            position: fixed;
+
+            left: 0;
+            right: 0;
+            bottom: 0;
+
+            height: 62px;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            gap: 8px;
+
+            background: rgba(91, 74, 53, 0.97);
+
+            box-shadow: 0 -3px 15px rgba(0, 0, 0, 0.12);
+
+            z-index: 1000;
+        }
+
+        .bottom-bar a {
+            text-decoration: none;
+
+            color: #fff;
+
+            padding: 9px 15px;
+
+            border-radius: 20px;
+
+            font-family: Arial, sans-serif;
+            font-size: 0.85rem;
+
+            transition: background 0.2s ease;
+        }
+
+        .bottom-bar a:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+
+        /* ================================
+           MOBILE
+           ================================ */
+
+        @media (max-width: 600px) {
+
+            .page {
+                padding: 32px 18px;
+            }
+
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .content p {
+                font-size: 1rem;
+                line-height: 1.75;
+            }
+
+            .quote {
+                font-size: 0.95rem;
+                padding: 15px 16px;
+            }
+
+            .bottom-bar {
+                height: 58px;
+            }
+
+            .bottom-bar a {
+                padding: 8px 11px;
+                font-size: 0.78rem;
+            }
+        }
+
+    </style>
+</head>
+
+
+<body id="top">
+
+    <main class="page">
+
+        <!-- ================================
+             HEADER
+             ================================ -->
+
+        <header class="header">
+
+            <h1>The Goal of All Answers</h1>
+
+            <div class="subtitle">
+                Silence is the real answer.
+            </div>
+
+        </header>
+
+
+        <!-- ================================
+             MAIN TEACHING
+             ================================ -->
+
+        <section class="content">
+
+            <p>
+                Some questions can be answered only in Silence.
+                Silence is the goal of all answers.
+                If an answer does not silence the mind it is "no" answer.
+            </p>
+
+            <p>
+                Thoughts are not the goal in themselves.
+                Their goal is Silence.
+                When you ask the question
+                <strong>"Who am I?"</strong>
+                you get no answer, there is silence.
+                That is the real answer.
+                For your soul is solidified silence.
+                This solidified silence is wisdom, is knowledge.
+            </p>
+
+            <p>
+                The easy way to silence the thoughts is to arouse the feelings.
+                For through feelings only peace, joy and love dawn.
+                And they are all your very nature.
+            </p>
+
+            <p>
+                To the question <strong>"Who am I?"</strong>
+                the only relevant answer is silence.
+                You need to discard all answers in words,
+                including "I am Nothing" or "I am the Cosmic Self"
+                or "I am the Self" —
+                and just stick to the question
+                <strong>"Who am I?"</strong>.
+            </p>
+
+            <p class="question">
+                All other answers are just thoughts.<br>
+                Thoughts can never be complete.<br>
+                <strong>Only Silence is complete.</strong>
+            </p>
+
+        </section>
+
+
+        <!-- ================================
+             QUOTES
+             ================================ -->
+
+        <section>
+
+            <h2 class="section-title">Quotes</h2>
+
+            <div class="quote">
+                "You cannot betray somebody, unless you gain trust.
+                A wicked person first gains trust and then betrays.
+                Even the deception of a wise man will only do the highest good."
+            </div>
+
+            <div class="quote">
+                "To be afraid of the wicked, is a sign of bad regime
+                and to be afraid to do bad is a sign of good regime."
+            </div>
+
+        </section>
+
+
+        <!-- ================================
+             HINDI
+             ================================ -->
+
+        <section class="hindi">
+
+            <h2 class="section-title">हिंदी</h2>
+
+            <p>
+                कुछ प्रश्नों के उत्तर केवल मौन में ही दीये जा सकते है।
+                सभी उत्तरों का लक्ष्य है मौन।
+                यदि किसी उत्तर से मन मौन, शांत नही होता,
+                तो वह कोई उत्तर नही है।
+            </p>
+
+            <div class="jai-guru">
+                🌸 Jai Guru Dev 🌸
+            </div>
+
+        </section>
+
+
+        <!-- ================================
+             DETAILS
+             ================================ -->
+
+        <div class="details">
+
+            <strong>Weekly Knowledge 245</strong><br>
+            Rishikesh, India<br>
+            16 Mar 2000 · 15:31
+
+        </div>
+
+    </main>
+
+
+    <!-- ================================
+         FIXED BOTTOM NAVIGATION
+         ================================ -->
+
+    <nav class="bottom-bar">
+
+        <!-- Website -->
+        <a href="https://yogaanurag.blogspot.com" target="_blank">
+            🧘 Yoga Anurag
+        </a>
+
+        <!-- WhatsApp -->
+        <a href="https://wa.me/916283266268" target="_blank">
+            💬 WhatsApp
+        </a>
+
+        <!-- Back to top -->
+        <a href="#top">
+            ↑ Top
+        </a>
+
+    </nav>
+
+
+</body>
+</html>
