@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chess Anurag Academy | Chess coaching in Kharar, Mohali and Chandigarh</title>
+<meta name="description" content="Chess coaching from beginner to advanced. Online, in-person and home sessions in Kharar, Mohali and Chandigarh. 10+ years of coaching experience.">
+<meta name="theme-color" content="#10231d">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--pine:#10231d;--card:#173128;--moss:#5f7f56;--sand:#eadfc4;--mute:#a7b3a3;--gold:#e9a23b;--line:#2a463a;
+--head:"Bricolage Grotesque",Georgia,serif;--body:"DM Sans",system-ui,sans-serif}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{background:var(--pine);color:var(--sand);font:400 1rem/1.6 var(--body);-webkit-font-smoothing:antialiased}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+header{position:sticky;top:0;z-index:10;background:rgba(16,35,29,.9);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+header .wrap{display:flex;align-items:center;justify-content:space-between;height:58px}
+.brand{font:800 1.05rem var(--head);text-decoration:none;color:var(--sand);display:flex;gap:8px;align-items:center}
+.brand i{font-style:normal;color:var(--gold);font-size:1.4rem}
+.btn{display:inline-block;padding:.65em 1.2em;border-radius:999px;font:700 .95rem var(--body);text-decoration:none;border:1.5px solid var(--gold);color:var(--sand);background:none;cursor:pointer;transition:transform .15s}
+.btn:hover{transform:translateY(-2px)}
+.btn.gold{background:var(--gold);color:#241705}
+.btn.ghost{border-color:var(--line)}
+.hero{display:grid;gap:28px;padding:30px 0 34px;align-items:center}
+h1{font:800 clamp(2.1rem,7.5vw,3.5rem)/1.04 var(--head);letter-spacing:-.02em}
+.lead{color:var(--mute);margin:14px 0 22px;max-width:46ch}
+.cta{display:flex;gap:10px;flex-wrap:wrap}
+@media(min-width:800px){.hero{grid-template-columns:1.05fr .95fr;padding:56px 0 48px}}
+.stage{justify-self:center;width:min(100%,430px)}
+.board{position:relative;aspect-ratio:1;border-radius:10px;overflow:hidden;container-type:inline-size;
+box-shadow:0 22px 50px rgba(0,0,0,.45),0 0 0 6px var(--card);
+background:conic-gradient(var(--moss) 25%,var(--sand) 0 50%,var(--moss) 0 75%,var(--sand) 0) 0 0/25% 25%}
+.p{position:absolute;left:0;top:0;width:12.5%;height:12.5%;display:grid;place-items:center;font-size:clamp(1.5rem,8vw,2.8rem);font-size:9.4cqw;line-height:1;
+transition:transform .6s cubic-bezier(.4,.1,.2,1),opacity .35s;will-change:transform;user-select:none;pointer-events:none}
+.p.w{color:#fffaf0;-webkit-text-stroke:.7px #17120a;text-shadow:0 2px 3px rgba(0,0,0,.35)}
+.p.b{color:#1a1a18;text-shadow:0 1px 0 rgba(255,255,255,.28)}
+.bar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:16px}
+.bar strong{display:block;font:800 1rem var(--head)}
+.bar span{font-size:.85rem;color:var(--mute)}
+.mini{font:600 .85rem var(--body);color:var(--sand);background:var(--card);border:1px solid var(--line);border-radius:8px;padding:.45em .9em;cursor:pointer;margin-left:6px}
+.mini:hover{border-color:var(--gold)}
+.facts{list-style:none;display:flex;flex-wrap:wrap;gap:6px 30px;padding:16px 0 0;border-top:1px solid var(--line);color:var(--mute);font-size:.95rem}
+.facts b{color:var(--sand)}
+.sec{padding:40px 0;border-top:1px solid var(--line)}
+h2{font:800 clamp(1.5rem,4.5vw,2rem)/1.15 var(--head);margin-bottom:6px}
+.sub{color:var(--mute);max-width:52ch}
+dl{margin-top:18px;border-top:1px solid var(--line)}
+.lv{display:grid;gap:4px;padding:16px 0;border-bottom:1px solid var(--line)}
+dt{font:800 1.2rem var(--head)}
+dd{color:var(--mute);max-width:56ch}
+@media(min-width:700px){.lv{grid-template-columns:210px 1fr}}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0 14px}
+.tabs button{font:700 .95rem var(--body);color:var(--sand);background:var(--card);border:1px solid var(--line);border-radius:999px;padding:.55em 1.2em;cursor:pointer}
+.tabs button[aria-selected=true]{background:var(--gold);border-color:var(--gold);color:#241705}
+#tp{background:var(--card);border-left:3px solid var(--gold);border-radius:6px;padding:16px 18px;max-width:62ch}
+form{display:grid;gap:14px;margin-top:18px;max-width:720px}
+@media(min-width:700px){form{grid-template-columns:repeat(3,1fr);align-items:end}form .btn,#msg{grid-column:1/-1;justify-self:start}}
+label{display:grid;gap:6px;font-weight:500;font-size:.9rem;color:var(--mute)}
+input,select{font:inherit;color:var(--sand);background:var(--card);border:1px solid var(--line);border-radius:10px;padding:.7em .8em;width:100%}
+#msg{color:var(--gold);font-size:.9rem;min-height:1.2em}
+footer{border-top:1px solid var(--line);padding:28px 0 40px;color:var(--mute);font-size:.9rem}
+.links{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px}
+@media(prefers-reduced-motion:reduce){.p{transition:none}html{scroll-behavior:auto}.btn:hover{transform:none}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+<a class="brand" href="#top"><i>&#9822;&#xFE0E;</i>Chess Anurag Academy</a>
+<a class="btn gold wa" href="#book">Message us</a>
+</div></header>
+
+<main id="top" class="wrap">
+<section class="hero">
+<div>
+<h1>Learn chess the way strong players think.</h1>
+<p class="lead">Coaching for every level, from your first moves to tournament play. Learn online, in person, or at home in Kharar, Mohali and Chandigarh.</p>
+<div class="cta"><a class="btn gold wa" href="#book">Message on WhatsApp</a><a class="btn ghost" href="#learn">How we teach</a></div>
+</div>
+<div class="stage">
+<div id="board" class="board" role="img" aria-label="Animated chess board replaying a famous game"></div>
+<div class="bar">
+<p><strong>The Opera Game</strong><span id="mv"></span></p>
+<div><button class="mini" id="pp" type="button">Pause</button><button class="mini" id="rs" type="button">Restart</button></div>
+</div>
+</div>
+</section>
+<ul class="facts"><li><b>10+ years</b> of coaching</li><li><b>All levels</b>, beginner to advanced</li><li><b>Kharar, Mohali, Chandigarh</b></li></ul>
+
+<section class="sec" id="levels">
+<h2>Pick up from where you are</h2>
+<p class="sub">Every student starts at their own level and moves up step by step.</p>
+<dl>
+<div class="lv"><dt>Beginner</dt><dd>How the pieces move, basic checkmates, and the habits that stop early blunders.</dd></div>
+<div class="lv"><dt>Intermediate</dt><dd>Tactics, opening ideas, simple endgames, and learning to plan instead of react.</dd></div>
+<div class="lv"><dt>Advanced</dt><dd>Deeper opening preparation, positional play, calculation, and tournament training with game analysis.</dd></div>
+</dl>
+</section>
+
+<section class="sec" id="learn">
+<h2>Three ways to learn</h2>
+<div class="tabs" role="tablist" aria-label="Learning modes">
+<button role="tab" aria-selected="true" aria-controls="tp" data-k="online">Online</button>
+<button role="tab" aria-selected="false" aria-controls="tp" data-k="offline">In person</button>
+<button role="tab" aria-selected="false" aria-controls="tp" data-k="home">At home</button>
+</div>
+<p id="tp" role="tabpanel">Live classes on video, from anywhere. Play games with the coach, review them together on screen, and practise puzzles between classes.</p>
+</section>
+
+<section class="sec" id="book">
+<h2>Ask about classes</h2>
+<p class="sub">Tell us who is learning and how you would like to learn. Your message opens in WhatsApp, ready to send.</p>
+<form id="f">
+<label>Student name<input name="n" required autocomplete="name"></label>
+<label>Level<select name="l"><option>Beginner</option><option>Intermediate</option><option>Advanced</option><option>Not sure</option></select></label>
+<label>How to learn<select name="m"><option>Online</option><option>In person</option><option>At home</option></select></label>
+<button class="btn gold" type="submit">Send on WhatsApp</button>
+<p id="msg" role="status"></p>
+</form>
+</section>
+</main>
+
+<footer><div class="wrap">
+<div class="links" id="links"></div>
+<p>Chess Anurag Academy. Kharar, Mohali and Chandigarh.</p>
+</div></footer>
+
+<script>
+/* Fill these in. Use digits only with country code, e.g. 919876543210. Leave a link empty to hide it. */
+const CONFIG={phone:"",instagram:"",youtube:"",facebook:""};
+
+/* Contact links */
+const wa=CONFIG.phone?"https://wa.me/"+CONFIG.phone:"";
+document.querySelectorAll(".wa").forEach(a=>{if(wa){a.href=wa;a.target="_blank";a.rel="noopener"}});
+[["Call",CONFIG.phone&&"tel:+"+CONFIG.phone],["WhatsApp",wa],["Instagram",CONFIG.instagram],["YouTube",CONFIG.youtube],["Facebook",CONFIG.facebook]]
+.forEach(([t,h])=>{if(!h)return;const a=document.createElement("a");a.className="btn ghost";a.textContent=t;a.href=h;if(h[0]=="h"){a.target="_blank";a.rel="noopener"}document.getElementById("links").append(a)});
+
+/* Tabs */
+const T={online:"Live classes on video, from anywhere. Play games with the coach, review them together on screen, and practise puzzles between classes.",
+offline:"In-person classes with real boards and clocks, so students get used to tournament conditions and learn to focus over the board.",
+home:"One-to-one sessions at home in and around Kharar, Mohali and Chandigarh. A calm, personal start for young players and busy families."};
+const tabs=document.querySelectorAll("[role=tab]"),tp=document.getElementById("tp");
+tabs.forEach(b=>b.onclick=()=>{tabs.forEach(x=>x.setAttribute("aria-selected",x==b));tp.textContent=T[b.dataset.k]});
+
+/* Booking form opens WhatsApp with a ready message */
+const f=document.getElementById("f"),msg=document.getElementById("msg");
+f.onsubmit=e=>{e.preventDefault();msg.textContent="";
+if(!wa){msg.textContent="Messaging is not available right now. Please try again soon.";console.warn("Set CONFIG.phone");return}
+const d=new FormData(f);
+const t="Hello Chess Anurag Academy, I would like to know about classes.\nStudent: "+d.get("n")+"\nLevel: "+d.get("l")+"\nHow to learn: "+d.get("m");
+open(wa+"?text="+encodeURIComponent(t),"_blank","noopener")};
+
+/* Chess board drawn with code: the Opera Game, Morphy vs. Duke of Brunswick and Count Isouard, Paris 1858 */
+const G="e2e4 e7e5 g1f3 d7d6 d2d4 c8g4 d4e5 g4f3 d1f3 d6e5 f1c4 g8f6 f3b3 d8e7 b1c3 c7c6 c1g5 b7b5 c3b5 c6b5 c4b5 b8d7 e1c1 a8d8 d1d7 d8d7 h1d1 e7e6 b5d7 f6d7 b3b8 d7b8 d1d8".split(" ");
+const bd=document.getElementById("board"),mv=document.getElementById("mv"),pp=document.getElementById("pp"),S=new Map();
+const back="rnbqkbnr",glyph={k:"\u265A",q:"\u265B",r:"\u265C",b:"\u265D",n:"\u265E",p:"\u265F"};
+let i=0,z=1,timer,vis=true,playing=!matchMedia("(prefers-reduced-motion:reduce)").matches;
+const place=(el,s)=>{el.style.transform="translate("+(s.charCodeAt(0)-97)*100+"%,"+(8-s[1])*100+"%)"};
+function setup(){bd.replaceChildren();S.clear();
+for(let f=0;f<8;f++)for(const [r,t,c] of [[1,back[f],"w"],[2,"p","w"],[7,"p","b"],[8,back[f],"b"]]){
+const e=document.createElement("span"),s=String.fromCharCode(97+f)+r;
+e.className="p "+c;e.textContent=glyph[t]+"\uFE0E";e.dataset.t=t;place(e,s);bd.append(e);S.set(s,e)}}
+function move(m){const a=m.slice(0,2),b=m.slice(2),e=S.get(a),x=S.get(b);
+if(x){x.style.transitionDelay=".4s";x.style.opacity=0;setTimeout(()=>x.remove(),1100)}
+if(e.dataset.t=="k"&&Math.abs(a.charCodeAt(0)-b.charCodeAt(0))==2){
+const q=b>a,ra=(q?"h":"a")+a[1],rb=String.fromCharCode(b.charCodeAt(0)+(q?-1:1))+a[1],R=S.get(ra);
+S.delete(ra);S.set(rb,R);place(R,rb)}
+S.delete(a);S.set(b,e);e.style.zIndex=++z;place(e,b)}
+function label(){mv.textContent=!i?"Paris, 1858. Morphy plays White.":i==G.length?"Checkmate on move 17.":"Move "+Math.ceil(i/2)+" of 17"}
+function upd(){pp.textContent=playing?"Pause":"Play"}
+function sched(d){clearTimeout(timer);if(playing&&vis)timer=setTimeout(step,d)}
+function step(){if(i>=G.length){setup();i=0}else move(G[i++]);label();sched(i>=G.length?3400:1100)}
+pp.onclick=()=>{playing=!playing;upd();playing?sched(300):clearTimeout(timer)};
+document.getElementById("rs").onclick=()=>{setup();i=0;playing=true;upd();label();sched(700)};
+new IntersectionObserver(([e])=>{vis=e.isIntersecting;vis?sched(700):clearTimeout(timer)}).observe(bd);
+setup();label();upd();
+</script>
+</body>
+</html>
