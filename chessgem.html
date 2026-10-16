@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- 
+      Prompt: Enhance single page html website aesthetics and functionality with lightweight JS/CSS chess animation
+      Indian Date & Time: 17 October 2026, 03:09 AM IST
+    -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chess Anurag Academy | Master the Strategy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --card-bg: rgba(17, 24, 39, 0.7);
+            --primary-gold: #f59e0b;
+            --primary-gold-hover: #d97706;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --border-color: rgba(245, 158, 11, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Canvas Background Animation */
+        #chessCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.35;
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        header {
+            text-align: center;
+            padding: 3rem 0 2rem 0;
+        }
+
+        header h1 {
+            font-size: 2.75rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+            background: linear-gradient(135deg, #ffffff 30%, var(--primary-gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.75rem;
+        }
+
+        header p {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--primary-gold);
+            padding: 0.35rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2.5rem 0;
+        }
+
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-color);
+            border-radius: 1rem;
+            padding: 2rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px -10px rgba(245, 158, 11, 0.3);
+            border-color: var(--primary-gold);
+        }
+
+        .card h3 {
+            font-size: 1.35rem;
+            color: var(--primary-gold);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card p {
+            color: var(--text-muted);
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .cta-section {
+            text-align: center;
+            background: linear-gradient(180deg, rgba(17, 24, 39, 0.4) 0%, rgba(245, 158, 11, 0.05) 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 1.5rem;
+            padding: 3rem 2rem;
+            margin: 3rem 0;
+        }
+
+        .cta-section h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .cta-section p {
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background-color: var(--primary-gold);
+            color: #000;
+            font-weight: 700;
+            padding: 0.85rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            transition: background-color 0.2s, transform 0.2s;
+            box-shadow: 0 4px 14px rgba(245, 158, 11, 0.4);
+        }
+
+        .btn:hover {
+            background-color: var(--primary-gold-hover);
+            transform: scale(1.05);
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        footer a {
+            color: var(--primary-gold);
+            text-decoration: none;
+        }
+
+        @media (max-width: 768px) {
+            header h1 { font-size: 2.2rem; }
+            .container { padding: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Lightweight Interactive Animated Code Canvas Background -->
+    <canvas id="chessCanvas"></canvas>
+
+    <div class="container">
+        <header>
+            <span class="badge">♟️ Welcome to Chess Anurag Academy</span>
+            <h1>Master the Art of Strategy</h1>
+            <p>Train your brain with top-tier tactical mentorship. Explore structured online, offline, and home chess sessions tailored for every level.</p>
+        </header>
+
+        <div class="grid">
+            <div class="card">
+                <h3>🌐 Online Sessions</h3>
+                <p>Learn flexibly from the comfort of your home. Interactive digital analysis boards, customized opening repertoires, and regular progress tracking.</p>
+            </div>
+            <div class="card">
+                <h3>🏫 Offline Sessions</h3>
+                <p>Prefer hands-on over-the-board play? Join our specialized in-person coaching hub for intense match practice and deep endgame calculation drills.</p>
+            </div>
+            <div class="card">
+                <h3>🏡 Home Coaching</h3>
+                <p>Get personalized one-on-one professional chess tutoring directly at your doorstep, optimized for rapid skill building and tournament prep.</p>
+            </div>
+        </div>
+
+        <div class="cta-section">
+            <h2>Ready to Make Your Move?</h2>
+            <p>Transform your tactical skills, calculations, and overall gameplay today.</p>
+            <a href="https://wa.me/916283266268" class="btn" target="_blank">
+                <span>💬 Connect on WhatsApp (+91 62832 66268)</span>
+            </a>
+        </div>
+
+        <footer>
+            <p>© 2026 Chess Anurag Academy. Powered by Code & Strategy. | <a href="https://yogaanurag.blogspot.com" target="_blank">Visit Blog</a></p>
+        </footer>
+    </div>
+
+    <!-- JavaScript for Lightweight Geometric Chess Background Animation -->
+    <script>
+        const canvas = document.getElementById('chessCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        // Floating geometric chess particle nodes simulation
+        const particles = [];
+        const numParticles = Math.min(window.innerWidth / 15, 60);
+        const chessSymbols = ['♟', '♞', '♝', '♜', '♛', '♚'];
+
+        for (let i = 0; i < numParticles; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                size: Math.random() * 18 + 14,
+                speedX: (Math.random() - 0.5) * 0.6,
+                speedY: (Math.random() - 0.5) * 0.6,
+                symbol: chessSymbols[Math.floor(Math.random() * chessSymbols.length)],
+                alpha: Math.random() * 0.5 + 0.2
+            });
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            particles.forEach(p => {
+                p.x += p.speedX;
+                p.y += p.speedY;
+
+                if (p.x < 0) p.x = canvas.width;
+                if (p.x > canvas.width) p.x = 0;
+                if (p.y < 0) p.y = canvas.height;
+                if (p.y > canvas.height) p.y = 0;
+
+                ctx.font = `${p.size}px sans-serif`;
+                ctx.fillStyle = `rgba(245, 158, 11, ${p.alpha})`;
+                ctx.fillText(p.symbol, p.x, p.y);
+            });
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+</body>
+</html>
