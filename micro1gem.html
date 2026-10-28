@@ -1,0 +1,854 @@
+```html
+<!-- Prompt: Nostr Decentralized Microblogging PWA | Date: 2026-10-28 20:22 IST -->
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uncensored Feed - Decentralized Microblogging</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- secp256k1 & nostr event helper scripts for browser crypto -->
+    <script src="https://cdn.jsdelivr.net/npm/@noble/curves@1.4.0/secp256k1.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@noble/hashes@1.4.0/sha256.js"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        nostr: {
+                            purple: '#8e44ad',
+                            dark: '#0f1419',
+                            card: '#161e27',
+                            border: '#2f3336',
+                            accent: '#1d9bf0',
+                            accentHover: '#1a8cd8',
+                            muted: '#71767b'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0f1419;
+            color: #e7e9ea;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #0f1419;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #2f3336;
+            border-radius: 3px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #4e5356;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased min-h-screen flex justify-center bg-nostr-dark selection:bg-nostr-accent selection:text-white">
+
+    <div class="w-full max-w-7xl flex min-h-screen">
+        
+        <!-- Sidebar Navigation (Desktop) -->
+        <header class="hidden md:flex flex-col justify-between w-64 lg:w-72 p-4 border-r border-nostr-border sticky top-0 h-screen">
+            <div class="flex flex-col gap-6">
+                <!-- App Logo/Header -->
+                <div class="flex items-center gap-3 px-3 py-2">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-purple-600 to-blue-500 flex items-center justify-center text-white shadow-lg shadow-purple-900/40">
+                        <i class="fa-solid font-bold text-xl fa-bolt"></i>
+                    </div>
+                    <div>
+                        <h1 class="font-bold text-lg leading-tight tracking-wide">NOSTR <span class="text-xs bg-purple-900/60 text-purple-300 px-1.5 py-0.5 rounded border border-purple-500/30">P2P</span></h1>
+                        <p class="text-xs text-nostr-muted">Uncensored Feed</p>
+                    </div>
+                </div>
+
+                <!-- Navigation Links -->
+                <nav class="flex flex-col gap-1">
+                    <button onclick="switchTab('feed')" id="nav-feed" class="flex items-center gap-4 px-4 py-3 text-lg font-semibold rounded-full hover:bg-white/10 transition-colors text-nostr-accent">
+                        <i class="fa-solid fa-house text-xl w-6"></i> Feed
+                    </button>
+                    <button onclick="switchTab('relays')" id="nav-relays" class="flex items-center gap-4 px-4 py-3 text-lg font-semibold rounded-full hover:bg-white/10 transition-colors text-nostr-muted">
+                        <i class="fa-solid fa-server text-xl w-6"></i> Relays <span id="connected-count-badge" class="ml-auto text-xs bg-green-900/80 text-green-300 px-2 py-0.5 rounded-full border border-green-500/30">0/0</span>
+                    </button>
+                    <button onclick="switchTab('keys')" id="nav-keys" class="flex items-center gap-4 px-4 py-3 text-lg font-semibold rounded-full hover:bg-white/10 transition-colors text-nostr-muted">
+                        <i class="fa-solid fa-key text-xl w-6"></i> Key Manager
+                    </button>
+                    <button onclick="downloadSelf()" class="flex items-center gap-4 px-4 py-3 text-lg font-semibold rounded-full hover:bg-white/10 transition-colors text-nostr-muted">
+                        <i class="fa-solid fa-download text-xl w-6 text-purple-400"></i> Save HTML
+                    </button>
+                </nav>
+
+                <!-- Post Button -->
+                <button onclick="focusComposer()" class="w-full bg-nostr-accent hover:bg-nostr-accentHover text-white font-bold py-3 rounded-full shadow-lg transition-all transform active:scale-95 flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-pen"></i> <span>Post Note</span>
+                </button>
+            </div>
+
+            <!-- Identity Card Bottom -->
+            <div class="border border-nostr-border rounded-2xl p-3 bg-nostr-card/60 backdrop-blur">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3 overflow-hidden">
+                        <div id="user-avatar" class="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold flex-shrink-0">
+                            ?
+                        </div>
+                        <div class="overflow-hidden">
+                            <p class="font-semibold text-sm truncate">My Keypair</p>
+                            <p id="user-pubkey-short" class="text-xs text-nostr-muted truncate font-mono">Generating...</p>
+                        </div>
+                    </div>
+                    <button onclick="switchTab('keys')" class="text-nostr-muted hover:text-white p-2">
+                        <i class="fa-solid fa-gear"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Mobile Top Navigation Header -->
+        <div class="md:hidden fixed top-0 left-0 right-0 z-50 bg-nostr-dark/90 backdrop-blur border-b border-nostr-border p-3 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-purple-600 to-blue-500 flex items-center justify-center text-white">
+                    <i class="fa-solid fa-bolt text-xs"></i>
+                </div>
+                <span class="font-bold text-sm">NOSTR Uncensored</span>
+            </div>
+            <div class="flex items-center gap-3">
+                <span id="mobile-relay-status" class="w-2.5 h-2.5 rounded-full bg-red-500"></span>
+                <button onclick="downloadSelf()" class="text-purple-400 p-1.5 rounded-lg hover:bg-white/10">
+                    <i class="fa-solid fa-download"></i>
+                </button>
+                <button onclick="switchTab('keys')" class="text-nostr-muted p-1.5 rounded-lg hover:bg-white/10">
+                    <i class="fa-solid fa-key"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Feed Area -->
+        <main class="flex-1 min-w-0 border-r border-nostr-border min-h-screen mt-14 md:mt-0 flex flex-col">
+            
+            <!-- Sticky Header inside main column -->
+            <div class="sticky top-0 z-40 bg-nostr-dark/80 backdrop-blur border-b border-nostr-border px-4 py-3 flex items-center justify-between">
+                <h2 id="view-title" class="font-bold text-xl">Home Feed</h2>
+                
+                <!-- Search Box -->
+                <div class="relative w-48 sm:w-64">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-xs text-nostr-muted"></i>
+                    <input type="text" id="search-input" onkeyup="filterFeed()" placeholder="Filter feed..." class="w-full bg-nostr-card border border-nostr-border rounded-full py-1.5 pl-8 pr-4 text-xs focus:outline-none focus:border-nostr-accent transition-colors">
+                </div>
+            </div>
+
+            <!-- VIEW 1: HOME FEED -->
+            <div id="view-feed" class="flex-1 flex flex-col">
+                <!-- Composer Card -->
+                <div class="p-4 border-b border-nostr-border flex gap-3 bg-nostr-card/30">
+                    <div id="composer-avatar" class="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold flex-shrink-0">
+                        ?
+                    </div>
+                    <div class="flex-1 flex flex-col gap-3">
+                        <textarea id="post-content" rows="3" placeholder="What's happening? (Broadcast to global Nostr relays...)" class="w-full bg-transparent text-white placeholder-nostr-muted resize-none focus:outline-none text-base"></textarea>
+                        
+                        <div class="flex items-center justify-between border-t border-nostr-border/60 pt-3">
+                            <div class="flex items-center gap-2 text-nostr-accent text-sm">
+                                <span class="text-xs text-nostr-muted flex items-center gap-1">
+                                    <i class="fa-solid fa-shield-halved text-green-400"></i> Direct Signed (Kind 1)
+                                </span>
+                            </div>
+                            <button onclick="publishNote()" id="btn-publish" class="bg-nostr-accent hover:bg-nostr-accentHover font-bold text-white px-5 py-2 rounded-full text-sm transition-all transform active:scale-95 disabled:opacity-50">
+                                Post Note
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feed Stream Container -->
+                <div id="feed-container" class="divide-y divide-nostr-border flex-1">
+                    <!-- Loading state -->
+                    <div id="feed-loader" class="p-8 text-center text-nostr-muted flex flex-col items-center gap-3">
+                        <div class="w-8 h-8 border-2 border-nostr-accent border-t-transparent rounded-full animate-spin"></div>
+                        <p class="text-sm">Connecting to decentralized Nostr relays...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VIEW 2: RELAY MANAGEMENT -->
+            <div id="view-relays" class="hidden p-4 flex-col gap-6">
+                <div class="bg-nostr-card border border-nostr-border rounded-2xl p-4">
+                    <h3 class="font-bold text-lg mb-2">WebSocket Relays Network</h3>
+                    <p class="text-xs text-nostr-muted mb-4">Nostr stores no data on central servers. Posts are mirrored across independent relays around the globe. Add or remove relays below.</p>
+                    
+                    <div class="flex gap-2 mb-4">
+                        <input type="text" id="new-relay-url" placeholder="wss://relay.example.com" class="flex-1 bg-nostr-dark border border-nostr-border rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-nostr-accent">
+                        <button onclick="addRelayFromInput()" class="bg-purple-600 hover:bg-purple-700 text-white font-semibold px-4 py-2 rounded-xl text-sm transition-colors">
+                            Add Relay
+                        </button>
+                    </div>
+
+                    <div id="relays-list" class="flex flex-col gap-2">
+                        <!-- Relays populated dynamically -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- VIEW 3: KEY MANAGER -->
+            <div id="view-keys" class="hidden p-4 flex-col gap-6">
+                <div class="bg-nostr-card border border-nostr-border rounded-2xl p-4 flex flex-col gap-4">
+                    <div>
+                        <h3 class="font-bold text-lg">Cryptographic Identity (secp256k1)</h3>
+                        <p class="text-xs text-nostr-muted">Your public key is your un-censorable account identity. Your private key signs your posts locally.</p>
+                    </div>
+
+                    <div class="flex flex-col gap-3">
+                        <div>
+                            <label class="text-xs text-nostr-muted font-semibold uppercase">Public Key (Hex / npub identifier)</label>
+                            <div class="flex gap-2 mt-1">
+                                <input type="text" id="key-pub-display" readonly class="flex-1 bg-nostr-dark border border-nostr-border rounded-xl px-3 py-2 text-xs font-mono select-all text-gray-300">
+                                <button onclick="copyToClipboard(document.getElementById('key-pub-display').value)" class="bg-white/10 hover:bg-white/20 px-3 py-2 rounded-xl text-xs">
+                                    <i class="fa-regular fa-copy"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="text-xs text-nostr-muted font-semibold uppercase">Private Key (Hex / nsec secret)</label>
+                            <div class="flex gap-2 mt-1">
+                                <input type="password" id="key-priv-display" readonly class="flex-1 bg-nostr-dark border border-nostr-border rounded-xl px-3 py-2 text-xs font-mono select-all text-red-400">
+                                <button onclick="togglePrivKeyVisibility()" class="bg-white/10 hover:bg-white/20 px-3 py-2 rounded-xl text-xs">
+                                    <i id="eye-icon" class="fa-regular fa-eye"></i>
+                                </button>
+                                <button onclick="copyToClipboard(document.getElementById('key-priv-display').value)" class="bg-white/10 hover:bg-white/20 px-3 py-2 rounded-xl text-xs">
+                                    <i class="fa-regular fa-copy"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border-t border-nostr-border pt-4 flex flex-wrap gap-2">
+                        <button onclick="generateNewKeys(true)" class="bg-red-900/40 hover:bg-red-900/60 border border-red-500/40 text-red-200 text-xs px-3 py-2 rounded-xl transition-colors">
+                            <i class="fa-solid fa-arrows-rotate"></i> Regenerate New Keypair
+                        </button>
+                        <button onclick="importPrivateKey()" class="bg-white/10 hover:bg-white/20 text-xs px-3 py-2 rounded-xl transition-colors">
+                            <i class="fa-solid fa-file-import"></i> Import Existing Hex Sec Key
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- Right Sidebar (Metadata / Info) -->
+        <aside class="hidden lg:flex flex-col w-80 p-4 gap-4 sticky top-0 h-screen overflow-y-auto border-l border-nostr-border">
+            
+            <!-- Information Box -->
+            <div class="bg-nostr-card border border-nostr-border rounded-2xl p-4 flex flex-col gap-3">
+                <h4 class="font-bold text-sm flex items-center gap-2">
+                    <i class="fa-solid fa-shield-cat text-purple-400"></i> Why is this Uncensorable?
+                </h4>
+                <ul class="text-xs text-nostr-muted flex flex-col gap-2 list-disc list-inside">
+                    <li><strong class="text-gray-300">No Central Server:</strong> Posts stream live over direct P2P WebSockets.</li>
+                    <li><strong class="text-gray-300">No Account Seizure:</strong> Accounts are cryptographic keypairs stored only on your device.</li>
+                    <li><strong class="text-gray-300">Run Anywhere:</strong> Save this page locally or host on IPFS. It works without domain hosts!</li>
+                </ul>
+            </div>
+
+            <!-- Active Relays Widget -->
+            <div class="bg-nostr-card border border-nostr-border rounded-2xl p-4">
+                <h4 class="font-bold text-sm mb-3">Live Relays</h4>
+                <div id="sidebar-relays-list" class="flex flex-col gap-2 text-xs">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+            
+            <footer class="text-xs text-nostr-muted px-2">
+                <p>Nostr Standard Protocol (NIP-01)</p>
+                <p class="mt-1">Zero Backend • Pure Client Execution</p>
+            </footer>
+        </aside>
+
+    </div>
+
+    <!-- Mobile Bottom Navigation Bar -->
+    <div class="md:hidden fixed bottom-0 left-0 right-0 bg-nostr-dark border-t border-nostr-border flex justify-around p-3 z-50">
+        <button onclick="switchTab('feed')" id="mob-nav-feed" class="text-nostr-accent flex flex-col items-center gap-1">
+            <i class="fa-solid fa-house text-lg"></i>
+            <span class="text-[10px]">Feed</span>
+        </button>
+        <button onclick="switchTab('relays')" id="mob-nav-relays" class="text-nostr-muted flex flex-col items-center gap-1">
+            <i class="fa-solid fa-server text-lg"></i>
+            <span class="text-[10px]">Relays</span>
+        </button>
+        <button onclick="switchTab('keys')" id="mob-nav-keys" class="text-nostr-muted flex flex-col items-center gap-1">
+            <i class="fa-solid fa-key text-lg"></i>
+            <span class="text-[10px]">Keys</span>
+        </button>
+    </div>
+
+    <!-- Toast Notification Overlay -->
+    <div id="toast" class="fixed bottom-16 md:bottom-6 right-6 bg-purple-600 text-white px-4 py-2.5 rounded-xl shadow-2xl text-xs font-semibold opacity-0 pointer-events-none transition-all duration-300 z-50 flex items-center gap-2">
+        <i class="fa-solid fa-circle-check"></i> <span id="toast-message">Notification</span>
+    </div>
+
+    <!-- APPLICATION LOGIC & CRYPTO ENGINE -->
+    <script>
+        // --- 1. DEFAULT RELAYS & CONFIG ---
+        const DEFAULT_RELAYS = [
+            "wss://relay.damus.io",
+            "wss://nos.lol",
+            "wss://relay.nostr.band",
+            "wss://nostr.mom"
+        ];
+
+        let state = {
+            relays: [],
+            sockets: {},
+            connectedRelays: new Set(),
+            keys: {
+                privHex: '',
+                pubHex: ''
+            },
+            notes: [],
+            seenEventIds: new Set(),
+            activeTab: 'feed'
+        };
+
+        // --- 2. CRYPTO HELPERS (secp256k1 & sha256 via Noble libraries) ---
+        const nobleSecp = window.nobleSecp256k1;
+        const nobleHashes = window.nobleHashes;
+
+        function hexToBytes(hex) {
+            const bytes = new Uint8Array(hex.length / 2);
+            for (let i = 0; i < hex.length; i += 2) {
+                bytes[i / 2] = parseInt(hex.substring(i, i + 2), 16);
+            }
+            return bytes;
+        }
+
+        function bytesToHex(bytes) {
+            return Array.from(bytes).map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        function generateKeyPairHex() {
+            const privBytes = nobleSecp.utils.randomPrivateKey();
+            const privHex = bytesToHex(privBytes);
+            // Schnorr public key (32 bytes x-only coordinate for Nostr)
+            const pubBytes = nobleSecp.getPublicKey(privBytes, true).slice(1);
+            const pubHex = bytesToHex(pubBytes);
+            return { privHex, pubHex };
+        }
+
+        function getPublicKeyFromPrivHex(privHex) {
+            try {
+                const pubBytes = nobleSecp.getPublicKey(hexToBytes(privHex), true).slice(1);
+                return bytesToHex(pubBytes);
+            } catch (e) {
+                return null;
+            }
+        }
+
+        async function computeEventHash(event) {
+            // Nostr Event ID calculation: SHA256 of serialized array [0, pubkey, created_at, kind, tags, content]
+            const serialized = JSON.stringify([
+                0,
+                event.pubkey,
+                event.created_at,
+                event.kind,
+                event.tags,
+                event.content
+            ]);
+            const encoder = new TextEncoder();
+            const hashBuffer = await nobleHashes.sha256(encoder.encode(serialized));
+            return bytesToHex(hashBuffer);
+        }
+
+        async function signEvent(event, privHex) {
+            const idHex = await computeEventHash(event);
+            event.id = idHex;
+            const sigBytes = await nobleSecp.schnorr.sign(hexToBytes(idHex), hexToBytes(privHex));
+            event.sig = bytesToHex(sigBytes);
+            return event;
+        }
+
+        // --- 3. INITIALIZATION & STORAGE ---
+        window.onload = function() {
+            initKeys();
+            initRelays();
+            connectRelays();
+            updateUI();
+        };
+
+        function initKeys() {
+            const storedPriv = localStorage.getItem('nostr_priv_key');
+            if (storedPriv) {
+                const pubHex = getPublicKeyFromPrivHex(storedPriv);
+                if (pubHex) {
+                    state.keys.privHex = storedPriv;
+                    state.keys.pubHex = pubHex;
+                } else {
+                    generateNewKeys(false);
+                }
+            } else {
+                generateNewKeys(false);
+            }
+        }
+
+        function generateNewKeys(confirmRegen = true) {
+            if (confirmRegen && !window.confirm("Are you sure? A new identity will be generated unless you back up your current private key!")) {
+                return;
+            }
+            const keypair = generateKeyPairHex();
+            state.keys = keypair;
+            localStorage.setItem('nostr_priv_key', keypair.privHex);
+            updateUIKeys();
+            showToast("New secp256k1 keypair generated!");
+        }
+
+        function importPrivateKey() {
+            const imported = prompt("Enter your hex-encoded private key:");
+            if (!imported) return;
+            const trimmed = imported.trim();
+            const pubHex = getPublicKeyFromPrivHex(trimmed);
+            if (pubHex) {
+                state.keys.privHex = trimmed;
+                state.keys.pubHex = pubHex;
+                localStorage.setItem('nostr_priv_key', trimmed);
+                updateUIKeys();
+                showToast("Private key imported successfully!");
+            } else {
+                alert("Invalid hex private key format.");
+            }
+        }
+
+        function initRelays() {
+            const storedRelays = localStorage.getItem('nostr_relays');
+            if (storedRelays) {
+                try {
+                    state.relays = JSON.parse(storedRelays);
+                } catch(e) {
+                    state.relays = [...DEFAULT_RELAYS];
+                }
+            } else {
+                state.relays = [...DEFAULT_RELAYS];
+            }
+        }
+
+        function saveRelays() {
+            localStorage.setItem('nostr_relays', JSON.stringify(state.relays));
+        }
+
+        // --- 4. WEBSOCKET NOSTR RELAY MANAGER ---
+        function connectRelays() {
+            state.relays.forEach(url => {
+                if (state.sockets[url]) return;
+
+                try {
+                    const ws = new WebSocket(url);
+                    state.sockets[url] = ws;
+
+                    ws.onopen = () => {
+                        state.connectedRelays.add(url);
+                        updateRelayStatusUI();
+                        // Subscribe to kind 1 notes (text notes) limit 50
+                        const reqFilter = ["REQ", "feed-sub", { kinds: [1], limit: 40 }];
+                        ws.send(JSON.stringify(reqFilter));
+                    };
+
+                    ws.onmessage = (event) => {
+                        handleRelayMessage(event.data, url);
+                    };
+
+                    ws.onerror = () => {
+                        state.connectedRelays.delete(url);
+                        updateRelayStatusUI();
+                    };
+
+                    ws.onclose = () => {
+                        state.connectedRelays.delete(url);
+                        delete state.sockets[url];
+                        updateRelayStatusUI();
+                    };
+
+                } catch(e) {
+                    console.error("Relay Connection Failed", url, e);
+                }
+            });
+        }
+
+        function handleRelayMessage(dataStr, relayUrl) {
+            try {
+                const msg = JSON.parse(dataStr);
+                const type = msg[0];
+
+                if (type === "EVENT") {
+                    const eventData = msg[2];
+                    if (eventData && eventData.kind === 1) {
+                        addNoteToFeed(eventData);
+                    }
+                }
+            } catch (e) {
+                // Ignore parse errors from non-standard responses
+            }
+        }
+
+        function addNoteToFeed(event) {
+            if (state.seenEventIds.has(event.id)) return;
+            state.seenEventIds.add(event.id);
+
+            state.notes.push(event);
+            // Sort newest first
+            state.notes.sort((a, b) => b.created_at - a.created_at);
+
+            // Hide loader if notes exist
+            const loader = document.getElementById('feed-loader');
+            if (loader) loader.style.display = 'none';
+
+            renderNotes();
+        }
+
+        // --- 5. PUBLISHING NOTES ---
+        async function publishNote() {
+            const input = document.getElementById('post-content');
+            const content = input.value.trim();
+
+            if (!content) {
+                showToast("Please enter some text to post.");
+                return;
+            }
+
+            if (!state.keys.privHex) {
+                showToast("No private key available to sign event.");
+                return;
+            }
+
+            const rawEvent = {
+                pubkey: state.keys.pubHex,
+                created_at: Math.floor(Date.now() / 1000),
+                kind: 1,
+                tags: [],
+                content: content
+            };
+
+            try {
+                const signedEvent = await signEvent(rawEvent, state.keys.privHex);
+                
+                // Add locally to timeline immediately
+                addNoteToFeed(signedEvent);
+
+                // Broadcast EVENT frame to all open relay WebSockets
+                const broadcastMsg = JSON.stringify(["EVENT", signedEvent]);
+                let sentCount = 0;
+
+                Object.keys(state.sockets).forEach(url => {
+                    const ws = state.sockets[url];
+                    if (ws && ws.readyState === WebSocket.OPEN) {
+                        ws.send(broadcastMsg);
+                        sentCount++;
+                    }
+                });
+
+                input.value = '';
+                showToast(`Broadcasted note to ${sentCount} relays!`);
+
+            } catch(e) {
+                console.error("Error signing/broadcasting note:", e);
+                alert("Failed to sign event: " + e.message);
+            }
+        }
+
+        // --- 6. UI RENDERERS ---
+        function renderNotes() {
+            const container = document.getElementById('feed-container');
+            const searchTerm = (document.getElementById('search-input').value || '').toLowerCase();
+
+            const filtered = state.notes.filter(note => {
+                if (!searchTerm) return true;
+                return note.content.toLowerCase().includes(searchTerm) || note.pubkey.toLowerCase().includes(searchTerm);
+            });
+
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div class="p-8 text-center text-nostr-muted text-sm">
+                        No notes found matching your filter.
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = filtered.map(note => {
+                const shortPub = note.pubkey.substring(0, 8) + '...' + note.pubkey.substring(note.pubkey.length - 4);
+                const timeAgo = formatTimestamp(note.created_at);
+                const avatarBg = stringToColor(note.pubkey);
+                const escapedContent = escapeHTML(note.content);
+
+                return `
+                    <article class="p-4 hover:bg-nostr-card/40 transition-colors flex gap-3">
+                        <div class="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-xs flex-shrink-0" style="background-color: ${avatarBg}">
+                            ${note.pubkey.substring(0, 2).toUpperCase()}
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center justify-between text-xs mb-1">
+                                <div class="flex items-center gap-2 overflow-hidden">
+                                    <span class="font-bold text-white truncate font-mono">${shortPub}</span>
+                                    <span class="text-nostr-muted">•</span>
+                                    <span class="text-nostr-muted">${timeAgo}</span>
+                                </div>
+                                <button onclick="copyToClipboard('${note.id}')" title="Copy Event ID" class="text-nostr-muted hover:text-white">
+                                    <i class="fa-regular fa-copy"></i>
+                                </button>
+                            </div>
+                            <p class="text-sm text-gray-200 whitespace-pre-wrap break-words leading-relaxed">${escapedContent}</p>
+                            
+                            <div class="flex items-center gap-6 mt-3 text-nostr-muted text-xs">
+                                <button class="hover:text-nostr-accent flex items-center gap-1.5 transition-colors">
+                                    <i class="fa-regular fa-comment"></i> <span>0</span>
+                                </button>
+                                <button class="hover:text-green-400 flex items-center gap-1.5 transition-colors">
+                                    <i class="fa-solid fa-repeat"></i> <span>0</span>
+                                </button>
+                                <button class="hover:text-red-400 flex items-center gap-1.5 transition-colors">
+                                    <i class="fa-regular fa-heart"></i> <span>0</span>
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+                `;
+            }).join('');
+        }
+
+        function updateUIKeys() {
+            document.getElementById('key-pub-display').value = state.keys.pubHex;
+            document.getElementById('key-priv-display').value = state.keys.privHex;
+
+            const shortPub = state.keys.pubHex ? state.keys.pubHex.substring(0, 6) + '...' + state.keys.pubHex.substring(state.keys.pubHex.length - 4) : 'Unknown';
+            document.getElementById('user-pubkey-short').innerText = shortPub;
+
+            const avatarColor = stringToColor(state.keys.pubHex || 'nostr');
+            const avatarEl = document.getElementById('user-avatar');
+            const composerAvatarEl = document.getElementById('composer-avatar');
+            
+            if (avatarEl) {
+                avatarEl.style.backgroundColor = avatarColor;
+                avatarEl.innerText = (state.keys.pubHex || '?').substring(0, 2).toUpperCase();
+            }
+            if (composerAvatarEl) {
+                composerAvatarEl.style.backgroundColor = avatarColor;
+                composerAvatarEl.innerText = (state.keys.pubHex || '?').substring(0, 2).toUpperCase();
+            }
+        }
+
+        function updateRelayStatusUI() {
+            const count = state.connectedRelays.size;
+            const total = state.relays.length;
+
+            const badge = document.getElementById('connected-count-badge');
+            if (badge) badge.innerText = `${count}/${total}`;
+
+            const mobDot = document.getElementById('mobile-relay-status');
+            if (mobDot) {
+                mobDot.className = `w-2.5 h-2.5 rounded-full ${count > 0 ? 'bg-green-500' : 'bg-red-500'}`;
+            }
+
+            // Render list in Relays view
+            const listEl = document.getElementById('relays-list');
+            if (listEl) {
+                listEl.innerHTML = state.relays.map(url => {
+                    const isConnected = state.connectedRelays.has(url);
+                    return `
+                        <div class="flex items-center justify-between p-3 bg-nostr-dark border border-nostr-border rounded-xl text-xs">
+                            <div class="flex items-center gap-2">
+                                <span class="w-2 h-2 rounded-full ${isConnected ? 'bg-green-400' : 'bg-red-400'}"></span>
+                                <span class="font-mono text-gray-300">${url}</span>
+                            </div>
+                            <button onclick="removeRelay('${url}')" class="text-red-400 hover:text-red-300 p-1">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            // Render right sidebar active relays list
+            const sideList = document.getElementById('sidebar-relays-list');
+            if (sideList) {
+                sideList.innerHTML = state.relays.map(url => {
+                    const isConnected = state.connectedRelays.has(url);
+                    return `
+                        <div class="flex items-center justify-between text-xs py-1">
+                            <span class="font-mono text-nostr-muted truncate max-w-[180px]">${url.replace('wss://', '')}</span>
+                            <span class="text-[10px] ${isConnected ? 'text-green-400' : 'text-red-400'}">${isConnected ? 'Online' : 'Offline'}</span>
+                        </div>
+                    `;
+                }).join('');
+            }
+        }
+
+        function updateUI() {
+            updateUIKeys();
+            updateRelayStatusUI();
+        }
+
+        // --- 7. UTILITY & TAB NAVIGATION ---
+        function switchTab(tabName) {
+            state.activeTab = tabName;
+
+            document.getElementById('view-feed').style.display = tabName === 'feed' ? 'flex' : 'none';
+            document.getElementById('view-relays').style.display = tabName === 'relays' ? 'flex' : 'none';
+            document.getElementById('view-keys').style.display = tabName === 'keys' ? 'flex' : 'none';
+
+            const titleMap = { feed: 'Home Feed', relays: 'Relay Management', keys: 'Keypair Manager' };
+            document.getElementById('view-title').innerText = titleMap[tabName] || 'Home Feed';
+
+            // Highlight nav icons
+            ['feed', 'relays', 'keys'].forEach(t => {
+                const btn = document.getElementById(`nav-${t}`);
+                const mobBtn = document.getElementById(`mob-nav-${t}`);
+                if (t === tabName) {
+                    if (btn) btn.className = btn.className.replace('text-nostr-muted', 'text-nostr-accent');
+                    if (mobBtn) mobBtn.className = mobBtn.className.replace('text-nostr-muted', 'text-nostr-accent');
+                } else {
+                    if (btn) btn.className = btn.className.replace('text-nostr-accent', 'text-nostr-muted');
+                    if (mobBtn) mobBtn.className = mobBtn.className.replace('text-nostr-accent', 'text-nostr-muted');
+                }
+            });
+        }
+
+        function filterFeed() {
+            renderNotes();
+        }
+
+        function focusComposer() {
+            switchTab('feed');
+            document.getElementById('post-content').focus();
+        }
+
+        function addRelayFromInput() {
+            const input = document.getElementById('new-relay-url');
+            let url = input.value.trim();
+            if (!url) return;
+
+            if (!url.startsWith('wss://') && !url.startsWith('ws://')) {
+                url = 'wss://' + url;
+            }
+
+            if (!state.relays.includes(url)) {
+                state.relays.push(url);
+                saveRelays();
+                connectRelays();
+                updateRelayStatusUI();
+                input.value = '';
+                showToast("Relay added!");
+            }
+        }
+
+        function removeRelay(url) {
+            state.relays = state.relays.filter(r => r !== url);
+            if (state.sockets[url]) {
+                state.sockets[url].close();
+                delete state.sockets[url];
+            }
+            state.connectedRelays.delete(url);
+            saveRelays();
+            updateRelayStatusUI();
+            showToast("Relay removed.");
+        }
+
+        function togglePrivKeyVisibility() {
+            const input = document.getElementById('key-priv-display');
+            const icon = document.getElementById('eye-icon');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.className = 'fa-regular fa-eye-slash';
+            } else {
+                input.type = 'password';
+                icon.className = 'fa-regular fa-eye';
+            }
+        }
+
+        function copyToClipboard(text) {
+            if (!text) return;
+            // Use execCommand for iframe compatibility
+            const tempInput = document.createElement("input");
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+            showToast("Copied to clipboard!");
+        }
+
+        function downloadSelf() {
+            const htmlContent = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+            const blob = new Blob([htmlContent], { type: "text/html" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "uncensored-nostr-feed.html";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast("App downloaded as single HTML file!");
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-message');
+            toastMsg.innerText = msg;
+            toast.classList.remove('opacity-0', 'pointer-events-none');
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'pointer-events-none');
+            }, 3000);
+        }
+
+        function formatTimestamp(ts) {
+            const date = new Date(ts * 1000);
+            const now = new Date();
+            const diffSec = Math.floor((now - date) / 1000);
+
+            if (diffSec < 60) return `${diffSec}s`;
+            if (diffSec < 3600) return `${Math.floor(diffSec / 60)}m`;
+            if (diffSec < 86400) return `${Math.floor(diffSec / 3600)}h`;
+            return date.toLocaleDateString();
+        }
+
+        function stringToColor(str) {
+            let hash = 0;
+            for (let i = 0; i < str.length; i++) {
+                hash = str.charCodeAt(i) + ((hash << 5) - hash);
+            }
+            let color = '#';
+            for (let i = 0; i < 3; i++) {
+                const value = (hash >> (i * 8)) & 0xFF;
+                color += ('00' + value.toString(16)).substr(-2);
+            }
+            return color;
+        }
+
+        function escapeHTML(str) {
+            return str.replace(/[&<>'"]/g, 
+                tag => ({
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    "'": '&#39;',
+                    '"': '&quot;'
+                }[tag] || tag)
+            );
+        }
+    </script>
+</body>
+</html>
+```
