@@ -1,0 +1,470 @@
+<!-- 
+  Prompt: Serverless Twitter-like website with URL hashtag state and Manual Approval Moderation Queue
+  Date & Time (IST): Wednesday, October 28, 2026 at 8:40 PM IST
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ModTweet - Serverless Moderated Wall</title>
+  <style>
+    :root {
+      --bg-color: #0f172a;
+      --card-bg: #1e293b;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #38bdf8;
+      --accent-hover: #0284c7;
+      --border: #334155;
+      --success: #22c55e;
+      --success-hover: #16a34a;
+      --danger: #ef4444;
+      --danger-hover: #dc2626;
+      --warning: #f59e0b;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px 10px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 650px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 10px;
+      background: var(--card-bg);
+      padding: 6px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .tab-btn {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 10px;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+    }
+
+    .tab-btn.active {
+      background: var(--accent);
+      color: #000;
+    }
+
+    .tab-content {
+      display: none;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .tab-content.active {
+      display: flex;
+    }
+
+    .composer {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    textarea {
+      width: 100%;
+      height: 100px;
+      background: transparent;
+      border: none;
+      color: var(--text-main);
+      font-size: 1rem;
+      resize: none;
+      outline: none;
+    }
+
+    textarea::placeholder {
+      color: var(--text-muted);
+    }
+
+    .composer-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid var(--border);
+      padding-top: 12px;
+    }
+
+    .char-count {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .btn {
+      background: var(--accent);
+      color: #000;
+      font-weight: 600;
+      border: none;
+      padding: 8px 18px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn:hover {
+      background: var(--accent-hover);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--text-main);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      background: var(--border);
+    }
+
+    .btn-success {
+      background: var(--success);
+      color: #fff;
+    }
+    .btn-success:hover {
+      background: var(--success-hover);
+    }
+
+    .btn-danger {
+      background: transparent;
+      color: var(--danger);
+      border: 1px solid var(--danger);
+    }
+    .btn-danger:hover {
+      background: var(--danger);
+      color: #fff;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .card-content {
+      font-size: 1.05rem;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 5px;
+    }
+
+    .alert {
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      display: none;
+    }
+
+    .badge {
+      background: var(--warning);
+      color: #000;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <div class="logo">🛡️ ModTweet</div>
+      <button class="btn btn-secondary" onclick="exportHTML()">⬇️ Export .html</button>
+    </header>
+
+    <div id="alertBox" class="alert"></div>
+
+    <!-- Navigation Tabs -->
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('wall')">📢 Public Wall</button>
+      <button class="tab-btn" onclick="switchTab('compose')">✍️ Compose / Submit</button>
+      <button class="tab-btn" onclick="switchTab('moderation')">
+        📥 Pending Queue <span id="queueBadge" class="badge" style="display:none;">0</span>
+      </button>
+    </div>
+
+    <!-- TAB 1: Public Wall (Approved Posts Only) -->
+    <div id="tab-wall" class="tab-content active">
+      <div style="font-size: 1.1rem; font-weight: 600; color: var(--text-muted);">Approved Public Timeline</div>
+      <div id="publicWall"></div>
+    </div>
+
+    <!-- TAB 2: Compose & Share Link -->
+    <div id="tab-compose" class="tab-content">
+      <div class="composer">
+        <textarea id="tweetInput" maxlength="280" placeholder="Write your post here..."></textarea>
+        <div class="composer-actions">
+          <span class="char-count" id="charCount">280 left</span>
+          <button class="btn" onclick="generateShareLink()">Generate Share Link 🚀</button>
+        </div>
+      </div>
+      <div id="shareResultCard" class="card" style="display: none; border-color: var(--accent);">
+        <div class="card-header"><span>🔗 Your Shareable Submission Link</span></div>
+        <div class="card-content" id="generatedLinkText" style="font-size: 0.9rem; word-break: break-all; color: var(--accent);"></div>
+        <div class="card-actions">
+          <button class="btn btn-secondary" onclick="copyGeneratedLink()">📋 Copy Link</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: Moderation Queue (Manual Approval Inbox) -->
+    <div id="tab-moderation" class="tab-content">
+      <div style="font-size: 1.1rem; font-weight: 600; color: var(--text-muted);">Incoming Posts Awaiting Approval</div>
+      <div id="moderationQueue"></div>
+    </div>
+  </div>
+
+  <script>
+    const tweetInput = document.getElementById('tweetInput');
+    const charCount = document.getElementById('charCount');
+    const alertBox = document.getElementById('alertBox');
+    const queueBadge = document.getElementById('queueBadge');
+
+    // Character Counter
+    tweetInput.addEventListener('input', () => {
+      charCount.textContent = `${280 - tweetInput.value.length} left`;
+    });
+
+    // Tab Switching
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+      
+      document.getElementById(`tab-${tabName}`).classList.add('active');
+      event.currentTarget.classList.add('active');
+    }
+
+    // Encoding Utilities
+    function encodeText(str) { return btoa(encodeURIComponent(str)); }
+    function decodeText(str) {
+      try { return decodeURIComponent(atob(str)); } catch (e) { return null; }
+    }
+
+    // Generate Share Link
+    function generateShareLink() {
+      const text = tweetInput.value.trim();
+      if (!text) { showAlert('Please write something first!'); return; }
+
+      const hash = encodeText(text);
+      const url = `${window.location.origin}${window.location.pathname}#post=${hash}`;
+      
+      document.getElementById('generatedLinkText').textContent = url;
+      document.getElementById('shareResultCard').style.display = 'block';
+      showAlert('✅ Link generated successfully!');
+      tweetInput.value = '';
+      charCount.textContent = '280 left';
+    }
+
+    function copyGeneratedLink() {
+      const link = document.getElementById('generatedLinkText').textContent;
+      navigator.clipboard.writeText(link).then(() => showAlert('📋 Link copied to clipboard!'));
+    }
+
+    // Check URL Hash on Load: If someone opens a link, send it to Pending Queue automatically!
+    function checkUrlHash() {
+      const hash = window.location.hash;
+      if (hash.startsWith('#post=')) {
+        const encoded = hash.replace('#post=', '');
+        const decoded = decodeText(encoded);
+        if (decoded) {
+          addPendingPost(decoded);
+          // Clear hash so it doesn't re-trigger on refresh
+          history.pushState("", document.title, window.location.pathname);
+        }
+      }
+    }
+
+    // Add Post to Pending Moderation Queue
+    function addPendingPost(text) {
+      let pending = JSON.parse(localStorage.getItem('mod_pending') || '[]');
+      // Avoid duplicate entries if already pending or approved
+      pending.unshift({ id: Date.now(), text, date: new Date().toLocaleTimeString() });
+      localStorage.setItem('mod_pending', JSON.stringify(pending));
+      renderAll();
+      showAlert('📥 New incoming post sent to Moderation Queue!');
+    }
+
+    // Approve Post (Moves from Pending to Public Wall)
+    function approvePost(id) {
+      let pending = JSON.parse(localStorage.getItem('mod_pending') || '[]');
+      let approved = JSON.parse(localStorage.getItem('mod_approved') || '[]');
+
+      const index = pending.findIndex(item => item.id === id);
+      if (index !== -1) {
+        const post = pending.splice(index, 1)[0];
+        approved.unshift(post);
+        
+        localStorage.setItem('mod_pending', JSON.stringify(pending));
+        localStorage.setItem('mod_approved', JSON.stringify(approved));
+        renderAll();
+        showAlert('✅ Post approved and published to Public Wall!');
+      }
+    }
+
+    // Reject Post (Deletes from Pending Queue)
+    function rejectPost(id) {
+      let pending = JSON.parse(localStorage.getItem('mod_pending') || '[]');
+      pending = pending.filter(item => item.id !== id);
+      localStorage.setItem('mod_pending', JSON.stringify(pending));
+      renderAll();
+      showAlert('❌ Post rejected and deleted.');
+    }
+
+    // Delete from Public Wall
+    function deleteApprovedPost(id) {
+      let approved = JSON.parse(localStorage.getItem('mod_approved') || '[]');
+      approved = approved.filter(item => item.id !== id);
+      localStorage.setItem('mod_approved', JSON.stringify(approved));
+      renderAll();
+      showAlert('🗑️ Post removed from Public Wall.');
+    }
+
+    // Render Feeds & Badges
+    function renderAll() {
+      const pending = JSON.parse(localStorage.getItem('mod_pending') || '[]');
+      const approved = JSON.parse(localStorage.getItem('mod_approved') || '[]');
+
+      // Update Badge
+      if (pending.length > 0) {
+        queueBadge.textContent = pending.length;
+        queueBadge.style.display = 'inline-block';
+      } else {
+        queueBadge.style.display = 'none';
+      }
+
+      // Render Moderation Queue
+      const modContainer = document.getElementById('moderationQueue');
+      if (pending.length === 0) {
+        modContainer.innerHTML = '<div style="color: var(--text-muted); text-align: center; padding: 20px;">No pending posts. Your queue is clean! ✨</div>';
+      } else {
+        modContainer.innerHTML = pending.map(item => `
+          <div class="card">
+            <div class="card-header">
+              <span>👤 Submitted Note</span>
+              <span>${item.date}</span>
+            </div>
+            <div class="card-content">${escapeHTML(item.text)}</div>
+            <div class="card-actions">
+              <button class="btn btn-success" onclick="approvePost(${item.id})">✅ Approve</button>
+              <button class="btn btn-danger" onclick="rejectPost(${item.id})">❌ Reject</button>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      // Render Public Wall
+      const wallContainer = document.getElementById('publicWall');
+      if (approved.length === 0) {
+        wallContainer.innerHTML = '<div style="color: var(--text-muted); text-align: center; padding: 20px;">No posts on the public wall yet. Approve some from the queue!</div>';
+      } else {
+        wallContainer.innerHTML = approved.map(item => `
+          <div class="card" style="margin-bottom: 12px;">
+            <div class="card-header">
+              <span>🌟 Verified Post</span>
+              <span>${item.date}</span>
+            </div>
+            <div class="card-content">${escapeHTML(item.text)}</div>
+            <div class="card-actions">
+              <button class="btn btn-danger" onclick="deleteApprovedPost(${item.id})">🗑️ Remove</button>
+            </div>
+          </div>
+        `).join('');
+      }
+    }
+
+    function escapeHTML(str) {
+      return str.replace(/[&<>'"]/g, 
+        tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+      );
+    }
+
+    function showAlert(msg) {
+      alertBox.textContent = msg;
+      alertBox.style.display = 'block';
+      setTimeout(() => { alertBox.style.display = 'none'; }, 4000);
+    }
+
+    function exportHTML() {
+      const blob = new Blob([document.documentElement.outerHTML], { type: 'text/html' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'modtweet.html';
+      a.click();
+    }
+
+    window.addEventListener('hashchange', checkUrlHash);
+    checkUrlHash();
+    renderAll();
+  </script>
+</body>
+</html>
